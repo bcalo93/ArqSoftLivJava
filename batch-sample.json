@@ -1,0 +1,86 @@
+{
+    "clients": [
+        {
+            "number": 20021,
+            "name": "piter g.",
+            "email": "piter.griffin@gmail.com",
+            "phone": "+598-93021",
+            "type": "PERSON"
+        },
+        {
+            "number": 3023,
+            "name": "transports-03",
+            "email": "transports-03@company.com",
+            "phone": "+598-93003",
+            "type": "COMPANY"
+        }
+    ],
+    "mechanics": [
+        {
+            "number": 1001,
+            "name": "elme canico",
+            "phone": "+598-93077",
+            "startDate": "2019-09-18T19:01:57"
+        },
+        {
+            "number": 1020,
+            "name": "dario perez",
+            "phone": "+598-93273",
+            "startDate": "2019-09-18T19:01:57"
+        }
+    ],
+    "workshops": [
+        {
+            "code": "WKSP001",
+            "name": "Workchop Uno",
+            "address": "Cerro Largo 230",
+            "city": "Montevideo"
+        },
+        {
+            "code": "WKSP015",
+            "name": "Service Pro",
+            "address": "Bvar Artigas 1720",
+            "city": "Maldonado"
+        }
+    ],
+    "readers": [
+        {
+            "code": "RED034",
+            "brand": "SONY",
+            "batteryLife": 600,
+            "workshopCode": "WKSP001"
+        },
+        {
+            "code": "RED057",
+            "brand": "PLAY",
+            "batteryLife": 240,
+            "workshopCode": "WKSP001"
+        },
+        {
+            "code": "RED150",
+            "brand": "STATION",
+            "batteryLife": 120,
+            "workshopCode": "WKSP015"
+        }
+    ],
+    "services": [
+        {
+            "code": "SRV010",
+            "date": "2019-09-18T19:01:57",
+            "serviceTime": 45,
+            "cost": 1500.0,
+            "clientCode": 20021,
+            "readerCode": "RED057",
+            "workshopCode": "WKSP001"
+        },
+        {
+            "code": "SRV017",
+            "date": "2019-09-18T19:01:57",
+            "serviceTime": 65,
+            "cost": 2500.0,
+            "clientCode": 3023,
+            "readerCode": "RED150",
+            "workshopCode": "WKSP015"
+        }
+    ]
+}
