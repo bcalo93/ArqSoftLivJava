@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         new WebServer()
-            .contextPath("app")
+            .contextPath("/app")
             .springApplicationContextClass(WebContext.class)
             .run();
     }
