@@ -1,5 +1,6 @@
 package com.compucar.context;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -11,10 +12,14 @@ import java.util.concurrent.TimeUnit;
 @EnableCaching
 public class CacheContext {
 
-    // TODO - Move hardcoded variables to a properties file
-    private long cacheTimeout = 5;
-    private long cacheMaximunSize = 100;
-    private String timeUnits = "MINUTES";
+    @Value("${cache.timeout}")
+    private long cacheTimeout;
+
+    @Value("${cache.maximunSize}")
+    private long cacheMaximunSize;
+
+    @Value("${cache.timeUnits}")
+    private String timeUnits;
 
 
     @Bean

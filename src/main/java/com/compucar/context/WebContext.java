@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @EnableWebMvc
-@Import({CacheContext.class, ScheduleContext.class})
+@Import({CacheContext.class, ScheduleContext.class, DbConfig.class, PropertiesContext.class})
 @EnableAspectJAutoProxy
 @ComponentScan("com.compucar")
 public class WebContext {

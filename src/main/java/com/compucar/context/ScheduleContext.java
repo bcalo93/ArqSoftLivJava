@@ -1,5 +1,6 @@
 package com.compucar.context;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
@@ -10,9 +11,11 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 @EnableScheduling
 public class ScheduleContext {
 
-    // TODO - Move hardcoded variables to a properties file
-    private int poolSize = 5;
-    private String poolPrefix = "Sch-";
+    @Value("${schedule.poolSize}")
+    private int poolSize;
+
+    @Value("${schedule.poolPrefix}")
+    private String poolPrefix;
 
     @Bean
     public TaskScheduler taskScheduler() {
