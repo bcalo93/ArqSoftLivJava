@@ -1,18 +1,10 @@
 package com.compucar.dao;
 
 import com.compucar.model.Client;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ClientDao {
+public interface ClientDao extends JpaRepository<Client, Long> {
 
-    void addClient(Client client);
-
-    void updateClient(Client client);
-
-    void removeClient(Client client);
-
-    Client getClient(Long clientId);
-
-    List<Client> getAllClients();
 }

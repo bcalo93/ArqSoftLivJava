@@ -18,11 +18,11 @@ public class ClientLogicImpTest {
         ClientDao dao = mock(ClientDao.class);
         List<Client> clients = new ArrayList<>();
         clients.add(new Client());
-        when(dao.getAllClients()).thenReturn(clients);
+        when(dao.findAll()).thenReturn(clients);
 
-        Assert.assertEquals(1, dao.getAllClients().size());
+        Assert.assertEquals(1, dao.findAll().size());
 
-        verify(dao, times(1)).getAllClients();
+        verify(dao, times(1)).findAll();
         verifyNoMoreInteractions(dao);
     }
 }
