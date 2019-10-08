@@ -30,5 +30,4 @@ public class CacheContext {
         cacheManager.setTimeUnit(TimeUnit.valueOf(timeUnits));
         return cacheManager;
     }
-
 }

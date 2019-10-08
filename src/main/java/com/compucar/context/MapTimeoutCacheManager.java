@@ -34,5 +34,4 @@ public class MapTimeoutCacheManager extends ConcurrentMapCacheManager {
                 .asMap();
         return new ConcurrentMapCache(name, map, false);
     }
-
 }
