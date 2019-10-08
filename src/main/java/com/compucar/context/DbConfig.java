@@ -106,5 +106,4 @@ public class DbConfig {
     }
 
     // JpaRepositories FACTORY END
-
 }
