@@ -1,7 +1,7 @@
 package com.compucar.controller;
 
 import com.compucar.model.Client;
-import com.compucar.logic.ClientLogic;
+import com.compucar.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,7 @@ import java.util.List;
 public class ClientController {
 
     @Autowired
-    private ClientLogic clientLogic;
+    private ClientService clientService;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
