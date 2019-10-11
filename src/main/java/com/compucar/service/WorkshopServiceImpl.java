@@ -1,6 +1,8 @@
 package com.compucar.service;
 
+import com.compucar.dao.ReaderDao;
 import com.compucar.dao.WorkshopDao;
+import com.compucar.model.Reader;
 import com.compucar.model.Workshop;
 import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.NotFoundException;
@@ -19,6 +21,9 @@ public class WorkshopServiceImpl implements WorkshopService {
 
     @Autowired
     private WorkshopDao workshopDao;
+
+    @Autowired
+    private ReaderDao readerDao;
 
     @Override
     //@Cacheable("users")
@@ -59,7 +64,16 @@ public class WorkshopServiceImpl implements WorkshopService {
         if(!workshopDao.exists(id)) {
             throw new NotFoundException("Workshop with id " + id);
         }
+        removeWorkshopFromReaders(id);
         workshopDao.delete(id);
+    }
+
+    private void removeWorkshopFromReaders(Long workshopId) {
+        List<Reader> readersInWorkshop = readerDao.findByWorkshopId(workshopId);
+        readersInWorkshop.forEach(reader -> {
+            reader.setWorkshop(null);
+            readerDao.save(reader);
+        });
     }
 
     private void validateWorkshopAdd(Workshop workshop) throws RequiredFieldMissingException, DuplicateElementException {

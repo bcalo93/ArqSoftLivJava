@@ -13,10 +13,14 @@ import javax.persistence.ManyToOne;
 public class Reader extends MaintenanceItem {
     private String code;
     private String brand;
-    private int batteryLife;
-    private int actualTimeUse;
+    private int actualTimeUseInMinutes;
+    private int batteryLifeInMinutes;
 
     @ManyToOne
     @JoinColumn
     private Workshop workshop;
+
+    public Reader() {
+        actualTimeUseInMinutes = 0;
+    }
 }
