@@ -68,8 +68,9 @@ public class DbConfig {
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("hibernate.dialect","org.hibernate.dialect.MySQL5Dialect");
+        properties.put("hibernate.show_sql", true);
         em.setJpaProperties(properties);
         return em;
     }
@@ -80,6 +81,5 @@ public class DbConfig {
         transactionManager.setEntityManagerFactory(emf);
         return transactionManager;
     }
-
     // JpaRepositories FACTORY END
 }
