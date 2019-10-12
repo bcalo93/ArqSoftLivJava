@@ -2,9 +2,9 @@ package com.compucar.logic.test;
 
 import com.compucar.builder.ClientBuilder;
 import com.compucar.dao.ClientDao;
-import com.compucar.exception.EntityNotExistException;
-import com.compucar.exception.EntityNullException;
-import com.compucar.exception.IdNullException;
+import com.compucar.service.exceptions.EntityNullException;
+import com.compucar.service.exceptions.IdNullException;
+import com.compucar.service.exceptions.NotFoundException;
 import com.compucar.service.ClientService;
 import com.compucar.service.ClientServiceImp;
 import com.compucar.model.Client;
@@ -30,9 +30,10 @@ public class ClientServiceImpTest {
 
     @Test
     public void addClientOkTest() throws EntityNullException {
+        Long expectedId = 20L;
         when(dao.save(isA(Client.class))).thenReturn(
                 new ClientBuilder()
-                        .id(20L)
+                        .id(expectedId)
                         .name("Test Client 1")
                         .email("email@email.com")
                         .number(30)
@@ -51,7 +52,7 @@ public class ClientServiceImpTest {
                 .build();
 
         Client result = service.addClient(toAdd);
-        Assert.assertEquals(20L, result.getId());
+        Assert.assertEquals(expectedId, result.getId());
         Assert.assertEquals("Test Client 1", result.getName());
         Assert.assertEquals("email@email.com", result.getEmail());
         Assert.assertEquals(30, result.getNumber());
@@ -68,9 +69,10 @@ public class ClientServiceImpTest {
     }
 
     @Test
-    public void updateClientOkTest() throws IdNullException, EntityNotExistException, EntityNullException {
-        when(dao.findOne(32L)).thenReturn(new ClientBuilder()
-                .id(32L)
+    public void updateClientOkTest() throws IdNullException, NotFoundException, EntityNullException {
+        Long expectedId = 32L;
+        when(dao.findOne(expectedId)).thenReturn(new ClientBuilder()
+                .id(expectedId)
                 .name("Test Client Update")
                 .email("email@email.com")
                 .number(30)
@@ -80,7 +82,7 @@ public class ClientServiceImpTest {
         );
 
         when(dao.save(isA(Client.class))).thenReturn(new ClientBuilder()
-                .id(32L)
+                .id(expectedId)
                 .name("New Client Name")
                 .email("newemial@email.com")
                 .number(30)
@@ -90,7 +92,7 @@ public class ClientServiceImpTest {
         );
 
         ClientService service = new ClientServiceImp(dao);
-        Client result = service.updateClient(32L, new ClientBuilder()
+        Client result = service.updateClient(expectedId, new ClientBuilder()
                 .name("New Client Name")
                 .email("newemial@email.com")
                 .number(0)
@@ -99,7 +101,7 @@ public class ClientServiceImpTest {
                 .build()
         );
 
-        Assert.assertEquals(32L, result.getId());
+        Assert.assertEquals(expectedId, result.getId());
         Assert.assertEquals("New Client Name", result.getName());
         Assert.assertEquals("newemial@email.com", result.getEmail());
         Assert.assertEquals(30, result.getNumber());
@@ -117,8 +119,8 @@ public class ClientServiceImpTest {
         ClientService service = new ClientServiceImp(dao);
         try {
             service.updateClient(100L, new Client());
-        } catch(EntityNotExistException ne) {
-            Assert.assertEquals("El cliente con id 100 no existe.", ne.getMessage());
+        } catch(NotFoundException ne) {
+            Assert.assertEquals("Client with id 100 was not found.", ne.getMessage());
             exceptionThrown = true;
         }
         Assert.assertTrue(exceptionThrown);
@@ -128,13 +130,13 @@ public class ClientServiceImpTest {
     }
 
     @Test(expected = EntityNullException.class)
-    public void updateClientNullTest() throws EntityNullException, EntityNotExistException, IdNullException {
+    public void updateClientNullTest() throws EntityNullException, NotFoundException, IdNullException {
         ClientService service = new ClientServiceImp(dao);
         service.updateClient(10L, null);
     }
 
     @Test(expected = IdNullException.class)
-    public void updateIdNullTest() throws EntityNullException, EntityNotExistException, IdNullException {
+    public void updateIdNullTest() throws EntityNullException, NotFoundException, IdNullException {
         ClientService service = new ClientServiceImp(dao);
         service.updateClient(null, new Client());
     }
@@ -178,9 +180,10 @@ public class ClientServiceImpTest {
     }
 
     @Test
-    public void getClientOkTest() throws EntityNotExistException, IdNullException {
-        when(dao.findOne(50L)).thenReturn(new ClientBuilder()
-                .id(50L)
+    public void getClientOkTest() throws NotFoundException, IdNullException {
+        Long expectedId = 50L;
+        when(dao.findOne(expectedId)).thenReturn(new ClientBuilder()
+                .id(expectedId)
                 .name("Test Client Get")
                 .email("get@email.com")
                 .number(20)
@@ -190,9 +193,9 @@ public class ClientServiceImpTest {
         );
 
         ClientService service = new ClientServiceImp(dao);
-        Client result = service.getClient(50L);
+        Client result = service.getClient(expectedId);
 
-        Assert.assertEquals(50L, result.getId());
+        Assert.assertEquals(expectedId, result.getId());
         Assert.assertEquals("Test Client Get", result.getName());
         Assert.assertEquals("get@email.com", result.getEmail());
         Assert.assertEquals(20, result.getNumber());
@@ -203,15 +206,15 @@ public class ClientServiceImpTest {
     }
 
     @Test
-    public void getClientIdNotExistTest() {
+    public void getClientIdNotExistTest() throws IdNullException {
         boolean exceptionThrown = false;
         when(dao.findOne(20L)).thenReturn(null);
         ClientService service = new ClientServiceImp(dao);
         try {
             service.getClient(20L);
 
-        } catch(EntityNotExistException | IdNullException ne) {
-            Assert.assertEquals("A client with id 20 doesn't exist", ne.getMessage());
+        } catch(NotFoundException ne) {
+            Assert.assertEquals("Client with id 20 was not found.", ne.getMessage());
             exceptionThrown = true;
         }
         Assert.assertTrue(exceptionThrown);
@@ -219,7 +222,7 @@ public class ClientServiceImpTest {
     }
 
     @Test(expected = IdNullException.class)
-    public void getClientIdNullTest() throws EntityNotExistException, IdNullException {
+    public void getClientIdNullTest() throws NotFoundException, IdNullException {
         ClientService service = new ClientServiceImp(dao);
         service.getClient(null);
     }

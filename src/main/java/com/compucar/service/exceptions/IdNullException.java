@@ -1,4 +1,4 @@
-package com.compucar.exception;
+package com.compucar.service.exceptions;
 
 public class IdNullException extends Exception {
     public IdNullException(String message) {

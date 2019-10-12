@@ -1,15 +1,14 @@
 package com.compucar.service;
 
 import com.compucar.dao.ClientDao;
-import com.compucar.exception.EntityNotExistException;
-import com.compucar.exception.EntityNullException;
-import com.compucar.exception.IdNullException;
+import com.compucar.service.exceptions.EntityNullException;
+import com.compucar.service.exceptions.IdNullException;
 import com.compucar.model.Client;
+import com.compucar.service.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 
@@ -26,24 +25,24 @@ public class ClientServiceImp implements ClientService {
     @Override
     public Client addClient(Client client) throws EntityNullException {
         if(client == null) {
-            throw new EntityNullException("El cliente es null.");
+            throw new EntityNullException("The client id is null.");
         }
         return this.clientDao.save(client);
     }
 
     @Override
     public Client updateClient(Long clientId, Client client) throws IdNullException, EntityNullException,
-            EntityNotExistException {
+            NotFoundException {
         if(clientId == null) {
-            throw new IdNullException("El id del cliente es null.");
+            throw new IdNullException("The client id is null.");
         }
         if(client == null) {
-            throw new EntityNullException("El cliente es null.");
+            throw new EntityNullException("The client is null.");
         }
 
         Client original = this.clientDao.findOne(clientId);
         if(original == null) {
-            throw new EntityNotExistException(String.format("El cliente con id %s no existe.", clientId));
+            throw new NotFoundException(String.format("Client with id %s", clientId));
         }
 
         original.update(client);
@@ -54,20 +53,20 @@ public class ClientServiceImp implements ClientService {
     @CacheEvict("clients")
     public void deleteClient(Long clientId) throws IdNullException {
         if(clientId == null) {
-            throw new IdNullException("El id del cliente es null.");
+            throw new IdNullException("The client id is null.");
         }
 
         this.clientDao.delete(clientId);
     }
 
     @Override
-    public Client getClient(Long clientId) throws IdNullException, EntityNotExistException {
+    public Client getClient(Long clientId) throws IdNullException, NotFoundException {
         if(clientId == null) {
-            throw new IdNullException("El id del cliente es null.");
+            throw new IdNullException("The client id is null.");
         }
         Client result = this.clientDao.findOne(clientId);
         if(result == null) {
-            throw new EntityNotExistException(String.format("A client with id %s doesn't exist", clientId));
+            throw new NotFoundException(String.format("Client with id %s", clientId));
         }
         return result;
     }
