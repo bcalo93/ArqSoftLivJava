@@ -1,5 +1,6 @@
 package com.compucar.service;
 
+import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
 import com.compucar.model.Client;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface ClientService {
 
-    Client addClient(Client client) throws EntityNullException;
+    Client addClient(Client client) throws EntityNullException, DuplicateElementException;
 
     Client updateClient(Long clientId, Client client) throws IdNullException, EntityNullException, NotFoundException;
 

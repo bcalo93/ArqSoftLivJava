@@ -1,6 +1,7 @@
 package com.compucar.service;
 
 import com.compucar.dao.ClientDao;
+import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
 import com.compucar.model.Client;
@@ -23,14 +24,19 @@ public class ClientServiceImp implements ClientService {
     }
 
     @Override
-    public Client addClient(Client client) throws EntityNullException {
+    @CacheEvict(value = "clients", allEntries = true)
+    public Client addClient(Client client) throws EntityNullException, DuplicateElementException {
         if(client == null) {
-            throw new EntityNullException("The client id is null.");
+            throw new EntityNullException("The client is null.");
+        }
+        if(this.clientDao.findByNumber(client.getNumber()) != null) {
+            throw new DuplicateElementException(String.format("Client with number %s", client.getNumber()));
         }
         return this.clientDao.save(client);
     }
 
     @Override
+    @CacheEvict(value = "clients", allEntries = true)
     public Client updateClient(Long clientId, Client client) throws IdNullException, EntityNullException,
             NotFoundException {
         if(clientId == null) {
@@ -50,16 +56,20 @@ public class ClientServiceImp implements ClientService {
     }
 
     @Override
-    @CacheEvict("clients")
+    @CacheEvict(value = "clients", allEntries = true)
     public void deleteClient(Long clientId) throws IdNullException {
         if(clientId == null) {
             throw new IdNullException("The client id is null.");
         }
 
-        this.clientDao.delete(clientId);
+        Client toDelete = this.clientDao.findOne(clientId);
+        if(toDelete != null) {
+            this.clientDao.delete(toDelete);
+        }
     }
 
     @Override
+    @Cacheable(value = "clients")
     public Client getClient(Long clientId) throws IdNullException, NotFoundException {
         if(clientId == null) {
             throw new IdNullException("The client id is null.");
@@ -72,7 +82,7 @@ public class ClientServiceImp implements ClientService {
     }
 
     @Override
-    @Cacheable("clients")
+    @Cacheable(value = "clients")
     public List<Client> getAllClients() {
         return this.clientDao.findAll();
     }

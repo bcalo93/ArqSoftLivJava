@@ -1,5 +1,6 @@
 package com.compucar.controller;
 
+import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
 import com.compucar.model.Client;
@@ -36,7 +37,7 @@ public class ClientController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Client post(@RequestBody Client client) throws EntityNullException {
+    public Client post(@RequestBody Client client) throws EntityNullException, DuplicateElementException {
         return this.clientService.addClient(client);
     }
 

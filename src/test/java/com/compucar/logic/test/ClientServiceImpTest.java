@@ -2,6 +2,7 @@ package com.compucar.logic.test;
 
 import com.compucar.builder.ClientBuilder;
 import com.compucar.dao.ClientDao;
+import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
 import com.compucar.service.exceptions.NotFoundException;
@@ -29,8 +30,9 @@ public class ClientServiceImpTest {
     }
 
     @Test
-    public void addClientOkTest() throws EntityNullException {
+    public void addClientOkTest() throws EntityNullException, DuplicateElementException {
         Long expectedId = 20L;
+        when(dao.findByNumber(anyInt())).thenReturn(null);
         when(dao.save(isA(Client.class))).thenReturn(
                 new ClientBuilder()
                         .id(expectedId)
@@ -59,13 +61,48 @@ public class ClientServiceImpTest {
         Assert.assertEquals("200003132", result.getPhone());
         Assert.assertEquals(ClientType.COMPANY, result.getType());
 
+        verify(dao, times(1)).findByNumber(30);
         verify(dao, times(1)).save(isA(Client.class));
     }
 
     @Test(expected = EntityNullException.class)
-    public void addClientNullTest() throws EntityNullException {
+    public void addClientNullTest() throws EntityNullException, DuplicateElementException {
         ClientService service = new ClientServiceImp(dao);
         service.addClient(null);
+    }
+
+    @Test
+    public void createDuplicateClientTest() throws EntityNullException {
+        boolean exceptionThrown = false;
+        int existingNumber = 35;
+        when(dao.findByNumber(existingNumber)).thenReturn(
+                new ClientBuilder()
+                        .name("Test Client Exist")
+                        .email("exist@email.com")
+                        .number(existingNumber)
+                        .phone("200003732")
+                        .type(ClientType.PERSON)
+                        .build()
+        );
+
+        ClientService service = new ClientServiceImp(dao);
+        try {
+            service.addClient(new ClientBuilder()
+                    .name("Test Client 1")
+                    .email("email@email.com")
+                    .number(existingNumber)
+                    .phone("200003132")
+                    .type(ClientType.COMPANY)
+                    .build()
+            );
+        } catch(DuplicateElementException de) {
+            Assert.assertEquals(String.format("Client with number %s already exists.", existingNumber),
+                    de.getMessage());
+            exceptionThrown = true;
+        }
+
+        Assert.assertTrue(exceptionThrown);
+        verify(dao, times(1)).findByNumber(existingNumber);
     }
 
     @Test
@@ -143,10 +180,34 @@ public class ClientServiceImpTest {
 
     @Test
     public void deleteClientOkTest() throws IdNullException {
-        doNothing().when(dao).delete(12L);
+        Long expectedId = 12L;
+        Client toDelete = new ClientBuilder()
+                .id(expectedId)
+                .name("To Delete")
+                .email("delete@email.com")
+                .number(123)
+                .phone("1234567890")
+                .type(ClientType.COMPANY)
+                .build();
+        when(dao.findOne(expectedId)).thenReturn(toDelete);
+        doNothing().when(dao).delete(toDelete);
+
         ClientService service = new ClientServiceImp(dao);
-        service.deleteClient(12L);
-        verify(dao, times(1)).delete(12L);
+        service.deleteClient(expectedId);
+
+        verify(dao, times(1)).findOne(expectedId);
+        verify(dao, times(1)).delete(toDelete);
+    }
+
+    @Test
+    public void deleteClientNotExistTest() throws IdNullException {
+        Long expectedId = 10L;
+        when(dao.findOne(expectedId)).thenReturn(null);
+
+        ClientService service = new ClientServiceImp(dao);
+        service.deleteClient(expectedId);
+
+        verify(dao, times(1)).findOne(expectedId);
     }
 
     @Test(expected = IdNullException.class)
@@ -154,6 +215,7 @@ public class ClientServiceImpTest {
         ClientService service = new ClientServiceImp(dao);
         service.deleteClient(null);
     }
+
 
     @Test
     public void getAllClientsOkTest() {
