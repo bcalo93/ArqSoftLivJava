@@ -11,4 +11,10 @@ import java.util.Calendar;
 @Entity
 public class Mechanic extends Contact {
     private Calendar startDate;
+
+    public void update(Mechanic mechanic) {
+        this.setName(mechanic.getName());
+        this.setStartDate(mechanic.getStartDate());
+        this.setPhone(mechanic.getPhone());
+    }
 }
