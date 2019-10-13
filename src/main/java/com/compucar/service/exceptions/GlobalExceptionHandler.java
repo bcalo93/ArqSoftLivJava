@@ -29,4 +29,11 @@ public class GlobalExceptionHandler {
     public String requiredFieldMissingHandler(RequiredFieldMissingException ex) {
         return ex.getMessage();
     }
+
+    @ResponseBody
+    @ExceptionHandler({EntityNullException.class, IdNullException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String badRequestHandler(Exception ex) {
+        return ex.getMessage();
+    }
 }

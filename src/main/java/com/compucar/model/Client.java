@@ -16,4 +16,11 @@ public class Client extends Contact {
     @Enumerated(EnumType.STRING)
     private ClientType type;
 
+    public void update(Client client) {
+        this.setType(client.getType());
+        this.setEmail(client.getEmail());
+        this.setPhone(client.getPhone());
+        this.setName(client.getName());
+    }
+
 }
