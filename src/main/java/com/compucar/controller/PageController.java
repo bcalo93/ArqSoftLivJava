@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class PageController {
     @Autowired
     private ClientService clientService;
-
-    @ResponseBody
+    
     @RequestMapping(value = "/clients", method = RequestMethod.GET)
     public String clientsList(Model model) {
         model.addAttribute("clients", this.clientService.getAllClients());
