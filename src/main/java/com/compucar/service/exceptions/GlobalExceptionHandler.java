@@ -31,6 +31,13 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseBody
+    @ExceptionHandler(InvalidFieldValueException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public String invalidFieldValueHandler(InvalidFieldValueException ex) {
+        return ex.getMessage();
+    }
+
+    @ResponseBody
     @ExceptionHandler({EntityNullException.class, IdNullException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String badRequestHandler(Exception ex) {

@@ -1,6 +1,5 @@
 package com.compucar.model;
 
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,7 +9,7 @@ import javax.persistence.MappedSuperclass;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @MappedSuperclass
-public class MaintenanceItem extends DataEntity {
+public abstract class MaintenanceItem extends DataEntity {
 
     @Column(unique = true)
     private String code;

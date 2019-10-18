@@ -4,6 +4,8 @@ import com.compucar.model.Client;
 import com.compucar.model.ClientType;
 import com.compucar.model.Mechanic;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 public class MechanicBuilder {
@@ -19,7 +21,7 @@ public class MechanicBuilder {
     }
 
     public MechanicBuilder number(int number) {
-        this.mechanic.setNumber(number);
+        this.mechanic.setCode(number);
         return this;
     }
 
@@ -33,7 +35,7 @@ public class MechanicBuilder {
         return this;
     }
 
-    public MechanicBuilder startDate(Calendar date) {
+    public MechanicBuilder startDate(LocalDateTime date) {
         this.mechanic.setStartDate(date);
         return this;
     }

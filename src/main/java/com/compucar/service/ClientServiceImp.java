@@ -29,8 +29,8 @@ public class ClientServiceImp implements ClientService {
         if(client == null) {
             throw new EntityNullException("The client is null.");
         }
-        if(this.clientDao.findByNumber(client.getNumber()) != null) {
-            throw new DuplicateElementException(String.format("Client with number %s", client.getNumber()));
+        if(this.clientDao.findByCode(client.getCode()) != null) {
+            throw new DuplicateElementException(String.format("Client with number %s", client.getCode()));
         }
         return this.clientDao.save(client);
     }

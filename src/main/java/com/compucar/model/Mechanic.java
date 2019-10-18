@@ -4,13 +4,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 public class Mechanic extends Contact {
-    private Calendar startDate;
+    private LocalDateTime startDate;
 
     public void update(Mechanic mechanic) {
         this.setName(mechanic.getName());

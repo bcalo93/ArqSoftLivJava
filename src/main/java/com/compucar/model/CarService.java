@@ -6,20 +6,23 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-public class Service extends  MaintenanceItem {
-    private String code;
-    private Calendar date;
+public class CarService extends MaintenanceItem {
+    private LocalDateTime date;
     private int serviceTime;
     private double cost;
 
     @ManyToOne
     @JoinColumn
     private Client client;
+
+    @ManyToOne
+    @JoinColumn
+    private Mechanic mechanic;
 
     @ManyToOne
     @JoinColumn

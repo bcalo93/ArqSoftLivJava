@@ -9,10 +9,10 @@ import javax.persistence.MappedSuperclass;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @MappedSuperclass
-public class Contact extends DataEntity {
+public abstract class Contact extends DataEntity {
 
     @Column(unique = true)
-    private int number;
+    private Integer code;
 
     private String name;
     private String phone;

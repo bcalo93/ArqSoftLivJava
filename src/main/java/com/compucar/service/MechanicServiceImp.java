@@ -29,8 +29,8 @@ public class MechanicServiceImp implements MechanicService {
         if(mechanic == null) {
             throw new EntityNullException("The mechanic is null.");
         }
-        if(this.mechanicDao.findByNumber(mechanic.getNumber()) != null) {
-            throw new DuplicateElementException(String.format("Mechanic with number %s", mechanic.getNumber()));
+        if(this.mechanicDao.findByCode(mechanic.getCode()).isPresent()) {
+            throw new DuplicateElementException(String.format("Mechanic with number %s", mechanic.getCode()));
         }
         return this.mechanicDao.save(mechanic);
     }

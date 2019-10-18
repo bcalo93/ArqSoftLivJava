@@ -13,7 +13,10 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.cglib.core.Local;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -31,8 +34,8 @@ public class MechanicServiceImpTest {
     @Test
     public void addMechanicOkTest() throws EntityNullException, DuplicateElementException {
         Long expectedId = 20L;
-        Calendar expectedDate = new GregorianCalendar(2018, GregorianCalendar.JUNE, 27);
-        when(dao.findByNumber(anyInt())).thenReturn(null);
+        LocalDateTime expectedDate = LocalDateTime.of(2018, 6, 27, 10, 30);
+        when(dao.findByCode(anyInt())).thenReturn(null);
         when(dao.save(isA(Mechanic.class))).thenReturn(
                 new MechanicBuilder()
                         .id(expectedId)
@@ -54,11 +57,11 @@ public class MechanicServiceImpTest {
         Mechanic result = service.addMechanic(toAdd);
         Assert.assertEquals(expectedId, result.getId());
         Assert.assertEquals("Test Mechanic", result.getName());
-        Assert.assertEquals(100, result.getNumber());
+        Assert.assertEquals(Integer.valueOf(100), result.getCode());
         Assert.assertEquals("21351235", result.getPhone());
         Assert.assertEquals(expectedDate, result.getStartDate());
 
-        verify(dao, times(1)).findByNumber(100);
+        verify(dao, times(1)).findByCode(100);
         verify(dao, times(1)).save(toAdd);
     }
 
@@ -72,10 +75,10 @@ public class MechanicServiceImpTest {
     public void createDuplicateMechanicTest() throws EntityNullException {
         boolean exceptionThrown = false;
         int existingNumber = 50;
-        when(dao.findByNumber(existingNumber)).thenReturn(
+        when(dao.findByCode(existingNumber).get()).thenReturn(
                 new MechanicBuilder()
                         .name("Test Client Exist")
-                        .startDate(new GregorianCalendar(2017, GregorianCalendar.JANUARY, 19))
+                        .startDate(LocalDateTime.of(2017, 1, 19, 1, 20))
                         .number(existingNumber)
                         .phone("220003732")
                         .build()
@@ -85,7 +88,7 @@ public class MechanicServiceImpTest {
         try {
             service.addMechanic(new MechanicBuilder()
                     .name("Test Mechanic")
-                    .startDate(new GregorianCalendar(2019, GregorianCalendar.OCTOBER, 10))
+                    .startDate(LocalDateTime.of(2019, 10, 10, 8, 40))
                     .number(existingNumber)
                     .phone("200503132")
                     .build()
@@ -97,18 +100,18 @@ public class MechanicServiceImpTest {
         }
 
         Assert.assertTrue(exceptionThrown);
-        verify(dao, times(1)).findByNumber(existingNumber);
+        verify(dao, times(1)).findByCode(existingNumber).get();
     }
 
     @Test
     public void updateMechanicOkTest() throws IdNullException, NotFoundException, EntityNullException {
         Long expectedId = 32L;
-        Calendar newDate = new GregorianCalendar(2017, Calendar.OCTOBER,31);
+        LocalDateTime newDate = LocalDateTime.of(2017, 10,31, 7, 20);
 
         when(dao.findOne(expectedId)).thenReturn(new MechanicBuilder()
                 .id(expectedId)
                 .name("Test Mechanic Update")
-                .startDate(new GregorianCalendar(2017, Calendar.JUNE,20))
+                .startDate(LocalDateTime.of(2017, 6,20, 9, 15))
                 .number(30)
                 .phone("200003132")
                 .build()
@@ -135,7 +138,7 @@ public class MechanicServiceImpTest {
         Assert.assertEquals(expectedId, result.getId());
         Assert.assertEquals("New Mechanic Name", result.getName());
         Assert.assertEquals(newDate, result.getStartDate());
-        Assert.assertEquals(30, result.getNumber());
+        Assert.assertEquals(Integer.valueOf(30), result.getCode());
         Assert.assertEquals("1534567820", result.getPhone());
 
         verify(dao, times(1)).findOne(expectedId);
@@ -180,7 +183,7 @@ public class MechanicServiceImpTest {
         Mechanic toDelete = new MechanicBuilder()
                 .id(expectedId)
                 .name("To Delete")
-                .startDate(new GregorianCalendar(2019, Calendar.DECEMBER, 20))
+                .startDate(LocalDateTime.of(2019, 12, 20, 5, 45))
                 .number(300)
                 .phone("1234567890")
                 .build();
@@ -218,7 +221,7 @@ public class MechanicServiceImpTest {
             mockList.add(new MechanicBuilder()
                     .id((long) i)
                     .name(String.format("Client %s", i))
-                    .startDate(new GregorianCalendar(2017, Calendar.OCTOBER, i))
+                    .startDate(LocalDateTime.of(2017, 10, i, 7, 10))
                     .number(i)
                     .phone(String.format("1234567890%s", i))
                     .build());
@@ -237,7 +240,7 @@ public class MechanicServiceImpTest {
     @Test
     public void getMechanicOkTest() throws NotFoundException, IdNullException {
         Long expectedId = 50L;
-        Calendar expectedDate = new GregorianCalendar(2013, Calendar.FEBRUARY,15);
+        LocalDateTime expectedDate = LocalDateTime.of(2013, 2,15, 1, 0);
         when(dao.findOne(expectedId)).thenReturn(new MechanicBuilder()
                 .id(expectedId)
                 .name("Test Mechanic Get")
@@ -253,7 +256,7 @@ public class MechanicServiceImpTest {
         Assert.assertEquals(expectedId, result.getId());
         Assert.assertEquals("Test Mechanic Get", result.getName());
         Assert.assertEquals(expectedDate, result.getStartDate());
-        Assert.assertEquals(20, result.getNumber());
+        Assert.assertEquals(Integer.valueOf(20), result.getCode());
         Assert.assertEquals("987654321", result.getPhone());
 
         verify(dao, times(1)).findOne(expectedId);
