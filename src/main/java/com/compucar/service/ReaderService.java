@@ -12,7 +12,7 @@ public interface ReaderService {
 
     Reader getReader(Long id) throws NotFoundException;
 
-    void addReader(Reader reader) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException;
+    Reader addReader(Reader reader) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException;
 
     void updateReader(Reader reader) throws RequiredFieldMissingException, NotFoundException, DuplicateElementException;
 

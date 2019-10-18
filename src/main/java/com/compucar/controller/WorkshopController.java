@@ -35,9 +35,9 @@ public class WorkshopController {
     }
 
     @PostMapping
-    public void saveWorkshop(@RequestBody Workshop workshop) throws DuplicateElementException, RequiredFieldMissingException {
+    public Workshop saveWorkshop(@RequestBody Workshop workshop) throws DuplicateElementException, RequiredFieldMissingException {
         log.info("received  {}", workshop);
-        workshopService.addWorkshop(workshop);
+        return workshopService.addWorkshop(workshop);
     }
 
     @PutMapping

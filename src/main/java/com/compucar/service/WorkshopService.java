@@ -12,7 +12,7 @@ public interface WorkshopService {
 
     Workshop getWorkshop(Long id) throws NotFoundException;
 
-    void addWorkshop(Workshop workshop) throws DuplicateElementException, RequiredFieldMissingException;
+    Workshop addWorkshop(Workshop workshop) throws DuplicateElementException, RequiredFieldMissingException;
 
     void updateWorkshop(Workshop workshop) throws NotFoundException, RequiredFieldMissingException, DuplicateElementException;
 

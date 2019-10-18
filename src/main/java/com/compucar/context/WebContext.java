@@ -1,5 +1,6 @@
 package com.compucar.context;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -27,5 +28,10 @@ public class WebContext implements WebMvcConfigurer {
         viewResolver.setContentType("text/html; charset=UTF-8");
         viewResolver.setSuffix(".jsp");
         return viewResolver;
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 }

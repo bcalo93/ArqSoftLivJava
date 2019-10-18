@@ -9,8 +9,9 @@ import com.compucar.service.exceptions.NotFoundException;
 import com.compucar.service.exceptions.RequiredFieldMissingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,25 +27,22 @@ public class ReaderServiceImpl implements ReaderService {
     private WorkshopDao workshopDao;
 
     @Override
-    //@Cacheable("users")
-    @Transactional
+    @Cacheable(value = "readers")
     public List<Reader> listReaders() {
         log.info("listing readers ");
         return readerDao.findAll();
     }
 
     @Override
-    //@Cacheable(value = "user")
-    @Transactional
+    @Cacheable(value = "readers")
     public Reader getReader(Long id) throws NotFoundException {
         log.info("getting reader: {}", id);
         return readerDao.findById(id).orElseThrow(() -> new NotFoundException("Reader with id " + id));
     }
 
     @Override
-    //@CacheEvict(value = "users", allEntries = true)
-    @Transactional
-    public void addReader(Reader reader) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException {
+    @CacheEvict(value = "readers", allEntries = true)
+    public Reader addReader(Reader reader) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException {
         log.info("adding reader {} ", reader);
         validateReaderAdd(reader);
         if(reader.getWorkshop() != null) {
@@ -52,10 +50,11 @@ public class ReaderServiceImpl implements ReaderService {
             Workshop workshop = workshopDao.findByCode(workshopCode).orElseThrow(() -> new NotFoundException("Workshop with code " + workshopCode));
             reader.setWorkshop(workshop);
         }
-        readerDao.save(reader);
+        return readerDao.save(reader);
     }
 
     @Override
+    @CacheEvict(value = "readers", allEntries = true)
     public void updateReader(Reader reader) throws RequiredFieldMissingException, NotFoundException, DuplicateElementException {
         log.info("updating reader {} ", reader);
         validateReaderUpdate(reader);
@@ -68,7 +67,7 @@ public class ReaderServiceImpl implements ReaderService {
     }
 
     @Override
-    //@CacheEvict(value = "users", allEntries = true)
+    @CacheEvict(value = "readers", allEntries = true)
     public void removeReader(Long id) throws NotFoundException {
         log.info("removing reader {} ", id);
         if(!readerDao.exists(id)) {

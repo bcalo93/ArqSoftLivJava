@@ -1,12 +1,15 @@
 package com.compucar.controller;
 
+import com.compucar.dto.ReaderDto;
 import com.compucar.model.Reader;
 import com.compucar.service.ReaderService;
 import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.NotFoundException;
 import com.compucar.service.exceptions.RequiredFieldMissingException;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +21,9 @@ public class ReaderController {
 
     @Autowired
     private ReaderService readerService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping
     public List<Reader> listReaders() {
@@ -35,9 +41,11 @@ public class ReaderController {
     }
 
     @PostMapping
-    public void saveReader(@RequestBody Reader reader) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException {
-        log.info("received  {}", reader);
-        readerService.addReader(reader);
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public Reader saveReader(@RequestBody ReaderDto readerDto) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException {
+        log.info("received  {}", readerDto);
+        Reader reader = modelMapper.map(readerDto, Reader.class);
+        return readerService.addReader(reader);
     }
 
     @PutMapping

@@ -9,8 +9,9 @@ import com.compucar.service.exceptions.NotFoundException;
 import com.compucar.service.exceptions.RequiredFieldMissingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,31 +27,29 @@ public class WorkshopServiceImpl implements WorkshopService {
     private ReaderDao readerDao;
 
     @Override
-    //@Cacheable("users")
-    @Transactional
+    @Cacheable(value = "workshops")
     public List<Workshop> listWorkshops() {
         log.info("listing workshops ");
         return workshopDao.findAll();
     }
 
     @Override
-    //@Cacheable(value = "user")
-    @Transactional
+    @Cacheable(value = "workshops")
     public Workshop getWorkshop(Long id) throws NotFoundException {
         log.info("getting workshop: {}", id);
         return workshopDao.findById(id).orElseThrow(() -> new NotFoundException("Workshop with id " + id));
     }
 
     @Override
-    //@CacheEvict(value = "users", allEntries = true)
-    @Transactional
-    public void addWorkshop(Workshop workshop) throws DuplicateElementException, RequiredFieldMissingException {
+    @CacheEvict(value = "workshops", allEntries = true)
+    public Workshop addWorkshop(Workshop workshop) throws DuplicateElementException, RequiredFieldMissingException {
         log.info("adding workshop {} ", workshop);
         validateWorkshopAdd(workshop);
-        workshopDao.save(workshop);
+        return workshopDao.save(workshop);
     }
 
     @Override
+    @CacheEvict(value = "workshops", allEntries = true)
     public void updateWorkshop(Workshop workshop) throws NotFoundException, RequiredFieldMissingException, DuplicateElementException {
         log.info("updating workshop {} ", workshop);
         validateWorkshopUpdate(workshop);
@@ -58,7 +57,7 @@ public class WorkshopServiceImpl implements WorkshopService {
     }
 
     @Override
-    //@CacheEvict(value = "users", allEntries = true)
+    @CacheEvict(value = "workshops", allEntries = true)
     public void removeWorkshop(Long id) throws NotFoundException {
         log.info("removing workshop {} ", id);
         if(!workshopDao.exists(id)) {
