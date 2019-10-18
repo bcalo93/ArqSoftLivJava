@@ -12,9 +12,8 @@ import javax.persistence.MappedSuperclass;
 public abstract class Contact extends DataEntity {
 
     @Column(unique = true)
-    private Integer code;
+    private Integer number;
 
     private String name;
     private String phone;
-
 }

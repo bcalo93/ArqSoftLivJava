@@ -32,7 +32,7 @@ public class ClientServiceImpTest {
     @Test
     public void addClientOkTest() throws EntityNullException, DuplicateElementException {
         Long expectedId = 20L;
-        when(dao.findByCode(anyInt())).thenReturn(null);
+        when(dao.findByNumber(anyInt())).thenReturn(null);
         when(dao.save(isA(Client.class))).thenReturn(
                 new ClientBuilder()
                         .id(expectedId)
@@ -57,11 +57,11 @@ public class ClientServiceImpTest {
         Assert.assertEquals(expectedId, result.getId());
         Assert.assertEquals("Test Client 1", result.getName());
         Assert.assertEquals("email@email.com", result.getEmail());
-        Assert.assertEquals(Integer.valueOf(30), result.getCode());
+        Assert.assertEquals(Integer.valueOf(30), result.getNumber());
         Assert.assertEquals("200003132", result.getPhone());
         Assert.assertEquals(ClientType.COMPANY, result.getType());
 
-        verify(dao, times(1)).findByCode(30);
+        verify(dao, times(1)).findByNumber(30);
         verify(dao, times(1)).save(isA(Client.class));
     }
 
@@ -75,7 +75,7 @@ public class ClientServiceImpTest {
     public void createDuplicateClientTest() throws EntityNullException {
         boolean exceptionThrown = false;
         int existingNumber = 35;
-        when(dao.findByCode(existingNumber)).thenReturn(
+        when(dao.findByNumber(existingNumber).get()).thenReturn(
                 new ClientBuilder()
                         .name("Test Client Exist")
                         .email("exist@email.com")
@@ -102,7 +102,7 @@ public class ClientServiceImpTest {
         }
 
         Assert.assertTrue(exceptionThrown);
-        verify(dao, times(1)).findByCode(existingNumber);
+        verify(dao, times(1)).findByNumber(existingNumber);
     }
 
     @Test
@@ -141,7 +141,7 @@ public class ClientServiceImpTest {
         Assert.assertEquals(expectedId, result.getId());
         Assert.assertEquals("New Client Name", result.getName());
         Assert.assertEquals("newemial@email.com", result.getEmail());
-        Assert.assertEquals(Integer.valueOf(30), result.getCode());
+        Assert.assertEquals(Integer.valueOf(30), result.getNumber());
         Assert.assertEquals("1234567890", result.getPhone());
         Assert.assertEquals(ClientType.PERSON, result.getType());
 
@@ -260,7 +260,7 @@ public class ClientServiceImpTest {
         Assert.assertEquals(expectedId, result.getId());
         Assert.assertEquals("Test Client Get", result.getName());
         Assert.assertEquals("get@email.com", result.getEmail());
-        Assert.assertEquals(Integer.valueOf(20), result.getCode());
+        Assert.assertEquals(Integer.valueOf(20), result.getNumber());
         Assert.assertEquals("987654321", result.getPhone());
         Assert.assertEquals(ClientType.PERSON, result.getType());
 

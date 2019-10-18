@@ -1,9 +1,9 @@
 package com.compucar.service;
 
+import com.compucar.model.Client;
 import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
-import com.compucar.model.Client;
 import com.compucar.service.exceptions.NotFoundException;
 
 import java.util.List;

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface MechanicDao extends JpaRepository<Mechanic, Long> {
-    Optional<Mechanic> findByCode(Integer code);
+    Optional<Mechanic> findByNumber(Integer code);
 }

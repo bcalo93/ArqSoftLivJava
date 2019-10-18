@@ -1,15 +1,19 @@
 package com.compucar.controller;
 
-import com.compucar.model.CarService;
+import com.compucar.dto.CarServiceDto;
+import com.compucar.model.*;
 import com.compucar.service.CarServiceService;
 import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.InvalidFieldValueException;
 import com.compucar.service.exceptions.NotFoundException;
 import com.compucar.service.exceptions.RequiredFieldMissingException;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Slf4j
@@ -19,6 +23,9 @@ public class CarServiceController {
 
     @Autowired
     private CarServiceService carServiceService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping
     public List<CarService> listServices() {
@@ -36,12 +43,30 @@ public class CarServiceController {
     }
 
     @PostMapping
-    public void saveService(@RequestBody CarService service) throws
+    public CarService saveService(@RequestBody CarServiceDto serviceDto) throws
             RequiredFieldMissingException,
             DuplicateElementException,
             NotFoundException,
             InvalidFieldValueException {
-        log.info("received  {}", service);
-        carServiceService.addService(service);
+        log.info("received  {}", serviceDto);
+        CarService service = convertToEntity(serviceDto);
+        return carServiceService.addService(service);
+    }
+
+    private CarService convertToEntity(CarServiceDto serviceDto) {
+        LocalDateTime serviceDate =  serviceDto.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        Client serviceClient = new Client(serviceDto.getClientCode());
+        Mechanic serviceMechanic = new Mechanic(serviceDto.getMechanicCode());
+        Reader serviceReader = new Reader(serviceDto.getReaderCode());
+        Workshop serviceWorkshop = new Workshop(serviceDto.getWorkshopCode());
+
+        CarService service = modelMapper.map(serviceDto, CarService.class);
+        service.setDate(serviceDate);
+        service.setClient(serviceClient);
+        service.setMechanic(serviceMechanic);
+        service.setReader(serviceReader);
+        service.setWorkshop(serviceWorkshop);
+
+        return service;
     }
 }

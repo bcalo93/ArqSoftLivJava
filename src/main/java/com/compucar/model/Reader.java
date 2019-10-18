@@ -22,4 +22,9 @@ public class Reader extends MaintenanceItem {
     public Reader() {
         actualTimeUse = 0;
     }
+
+    public Reader(String code) {
+        this();
+        this.setCode(code);
+    }
 }

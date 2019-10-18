@@ -9,8 +9,13 @@ import javax.persistence.Entity;
 @Data
 @Entity
 public class Workshop extends MaintenanceItem {
-    private String code;
     private String name;
     private String address;
     private String city;
+
+    public Workshop() {}
+
+    public Workshop(String code) {
+        this.setCode(code);
+    }
 }

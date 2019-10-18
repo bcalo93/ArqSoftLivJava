@@ -1,10 +1,10 @@
 package com.compucar.controller;
 
+import com.compucar.model.Client;
+import com.compucar.service.ClientService;
 import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
-import com.compucar.model.Client;
-import com.compucar.service.ClientService;
 import com.compucar.service.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

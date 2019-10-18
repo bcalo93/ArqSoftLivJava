@@ -13,5 +13,5 @@ public interface CarServiceService {
 
     CarService getService(Long id) throws NotFoundException;
 
-    void addService(CarService service) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException, InvalidFieldValueException;
+    CarService addService(CarService service) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException, InvalidFieldValueException;
 }

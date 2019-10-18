@@ -35,7 +35,7 @@ public class MechanicServiceImpTest {
     public void addMechanicOkTest() throws EntityNullException, DuplicateElementException {
         Long expectedId = 20L;
         LocalDateTime expectedDate = LocalDateTime.of(2018, 6, 27, 10, 30);
-        when(dao.findByCode(anyInt())).thenReturn(null);
+        when(dao.findByNumber(anyInt())).thenReturn(null);
         when(dao.save(isA(Mechanic.class))).thenReturn(
                 new MechanicBuilder()
                         .id(expectedId)
@@ -57,11 +57,11 @@ public class MechanicServiceImpTest {
         Mechanic result = service.addMechanic(toAdd);
         Assert.assertEquals(expectedId, result.getId());
         Assert.assertEquals("Test Mechanic", result.getName());
-        Assert.assertEquals(Integer.valueOf(100), result.getCode());
+        Assert.assertEquals(Integer.valueOf(100), result.getNumber());
         Assert.assertEquals("21351235", result.getPhone());
         Assert.assertEquals(expectedDate, result.getStartDate());
 
-        verify(dao, times(1)).findByCode(100);
+        verify(dao, times(1)).findByNumber(100);
         verify(dao, times(1)).save(toAdd);
     }
 
@@ -75,7 +75,7 @@ public class MechanicServiceImpTest {
     public void createDuplicateMechanicTest() throws EntityNullException {
         boolean exceptionThrown = false;
         int existingNumber = 50;
-        when(dao.findByCode(existingNumber).get()).thenReturn(
+        when(dao.findByNumber(existingNumber).get()).thenReturn(
                 new MechanicBuilder()
                         .name("Test Client Exist")
                         .startDate(LocalDateTime.of(2017, 1, 19, 1, 20))
@@ -100,7 +100,7 @@ public class MechanicServiceImpTest {
         }
 
         Assert.assertTrue(exceptionThrown);
-        verify(dao, times(1)).findByCode(existingNumber).get();
+        verify(dao, times(1)).findByNumber(existingNumber).get();
     }
 
     @Test
@@ -138,7 +138,7 @@ public class MechanicServiceImpTest {
         Assert.assertEquals(expectedId, result.getId());
         Assert.assertEquals("New Mechanic Name", result.getName());
         Assert.assertEquals(newDate, result.getStartDate());
-        Assert.assertEquals(Integer.valueOf(30), result.getCode());
+        Assert.assertEquals(Integer.valueOf(30), result.getNumber());
         Assert.assertEquals("1534567820", result.getPhone());
 
         verify(dao, times(1)).findOne(expectedId);
@@ -256,7 +256,7 @@ public class MechanicServiceImpTest {
         Assert.assertEquals(expectedId, result.getId());
         Assert.assertEquals("Test Mechanic Get", result.getName());
         Assert.assertEquals(expectedDate, result.getStartDate());
-        Assert.assertEquals(Integer.valueOf(20), result.getCode());
+        Assert.assertEquals(Integer.valueOf(20), result.getNumber());
         Assert.assertEquals("987654321", result.getPhone());
 
         verify(dao, times(1)).findOne(expectedId);

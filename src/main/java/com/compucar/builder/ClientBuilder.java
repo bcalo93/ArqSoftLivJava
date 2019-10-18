@@ -16,7 +16,7 @@ public class ClientBuilder {
     }
 
     public ClientBuilder number(int number) {
-        this.client.setCode(number);
+        this.client.setNumber(number);
         return this;
     }
 
