@@ -1,10 +1,10 @@
 package com.compucar.service;
 
 import com.compucar.dao.ClientDao;
+import com.compucar.model.Client;
 import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
-import com.compucar.model.Client;
 import com.compucar.service.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -29,8 +29,8 @@ public class ClientServiceImp implements ClientService {
         if(client == null) {
             throw new EntityNullException("The client is null.");
         }
-        if(this.clientDao.findByCode(client.getCode()) != null) {
-            throw new DuplicateElementException(String.format("Client with number %s", client.getCode()));
+        if(this.clientDao.findByNumber(client.getNumber()) != null) {
+            throw new DuplicateElementException(String.format("Client with number %s", client.getNumber()));
         }
         return this.clientDao.save(client);
     }

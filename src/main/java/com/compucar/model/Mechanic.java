@@ -12,6 +12,12 @@ import java.time.LocalDateTime;
 public class Mechanic extends Contact {
     private LocalDateTime startDate;
 
+    public Mechanic() {}
+
+    public Mechanic(Integer number) {
+        this.setNumber(number);
+    }
+
     public void update(Mechanic mechanic) {
         this.setName(mechanic.getName());
         this.setStartDate(mechanic.getStartDate());

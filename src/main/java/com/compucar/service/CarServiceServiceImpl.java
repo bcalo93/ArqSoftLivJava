@@ -45,13 +45,13 @@ public class CarServiceServiceImpl implements CarServiceService {
     }
 
     @Override
-    public void addService(CarService service) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException, InvalidFieldValueException {
+    public CarService addService(CarService service) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException, InvalidFieldValueException {
         log.info("adding service {} ", service);
         validateServiceAdd(service);
 
         if(service.getClient() != null) {
-            String clientEmail = service.getClient().getEmail();
-            Client client = clientDao.findByEmail(clientEmail).orElseThrow(() -> new NotFoundException("Client with email " + clientEmail));
+            Integer clientNumber = service.getClient().getNumber();
+            Client client = clientDao.findByNumber(clientNumber).orElseThrow(() -> new NotFoundException("Client with number " + clientNumber));
             service.setClient(client);
         }
         if(service.getReader() != null) {
@@ -65,11 +65,11 @@ public class CarServiceServiceImpl implements CarServiceService {
             service.setWorkshop(workshop);
         }
         if(service.getMechanic() != null) {
-            Integer mechanicCode = service.getMechanic().getCode();
-            Mechanic mechanic = mechanicDao.findByCode(mechanicCode).orElseThrow(() -> new NotFoundException("Mechanic with code " + mechanicCode));
+            Integer mechanicNumber = service.getMechanic().getNumber();
+            Mechanic mechanic = mechanicDao.findByNumber(mechanicNumber).orElseThrow(() -> new NotFoundException("Mechanic with number " + mechanicNumber));
             service.setMechanic(mechanic);
         }
-        carServiceDao.save(service);
+        return carServiceDao.save(service);
     }
 
     private void validateServiceAdd(CarService service) throws DuplicateElementException, RequiredFieldMissingException, InvalidFieldValueException {
