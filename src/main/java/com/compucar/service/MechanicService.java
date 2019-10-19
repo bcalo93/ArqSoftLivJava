@@ -5,11 +5,12 @@ import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
 import com.compucar.service.exceptions.NotFoundException;
+import com.compucar.service.exceptions.RequiredFieldMissingException;
 
 import java.util.List;
 
 public interface MechanicService {
-    Mechanic addMechanic(Mechanic mechanic) throws DuplicateElementException, EntityNullException;
+    Mechanic addMechanic(Mechanic mechanic) throws DuplicateElementException, EntityNullException, RequiredFieldMissingException;
 
     Mechanic updateMechanic(Long id, Mechanic mechanic) throws NotFoundException, IdNullException, EntityNullException;
 

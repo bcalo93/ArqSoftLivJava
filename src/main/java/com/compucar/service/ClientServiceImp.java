@@ -31,7 +31,7 @@ public class ClientServiceImp implements ClientService {
             throw new EntityNullException("The client is null.");
         }
         if(client.getNumber() == null) {
-            throw new RequiredFieldMissingException("Number ");
+            throw new RequiredFieldMissingException("Number");
         }
         if(this.clientDao.findByNumber(client.getNumber()).isPresent()) {
             throw new DuplicateElementException(String.format("Client with number %s", client.getNumber()));

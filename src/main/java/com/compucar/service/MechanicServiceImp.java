@@ -6,6 +6,7 @@ import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
 import com.compucar.service.exceptions.NotFoundException;
+import com.compucar.service.exceptions.RequiredFieldMissingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,9 +26,12 @@ public class MechanicServiceImp implements MechanicService {
 
     @Override
     @CacheEvict(value = "mechanics", allEntries = true)
-    public Mechanic addMechanic(Mechanic mechanic) throws DuplicateElementException, EntityNullException {
+    public Mechanic addMechanic(Mechanic mechanic) throws DuplicateElementException, EntityNullException, RequiredFieldMissingException {
         if(mechanic == null) {
             throw new EntityNullException("The mechanic is null.");
+        }
+        if(mechanic.getNumber() == null) {
+            throw new RequiredFieldMissingException("Number");
         }
         if(this.mechanicDao.findByNumber(mechanic.getNumber()).isPresent()) {
             throw new DuplicateElementException(String.format("Mechanic with number %s", mechanic.getNumber()));

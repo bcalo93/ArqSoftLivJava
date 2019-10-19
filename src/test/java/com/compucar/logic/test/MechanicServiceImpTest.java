@@ -9,6 +9,7 @@ import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
 import com.compucar.service.exceptions.NotFoundException;
+import com.compucar.service.exceptions.RequiredFieldMissingException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -28,7 +29,7 @@ public class MechanicServiceImpTest {
         this.dao = mock(MechanicDao.class);
     }
     @Test
-    public void addMechanicOkTest() throws EntityNullException, DuplicateElementException {
+    public void addMechanicOkTest() throws EntityNullException, DuplicateElementException, RequiredFieldMissingException {
         Long expectedId = 20L;
         LocalDateTime expectedDate = LocalDateTime.of(2018, 6, 27, 10, 30);
         when(dao.findByNumber(anyInt())).thenReturn(Optional.empty());
@@ -62,13 +63,13 @@ public class MechanicServiceImpTest {
     }
 
     @Test(expected = EntityNullException.class)
-    public void addMechanicNullTest() throws EntityNullException, DuplicateElementException {
+    public void addMechanicNullTest() throws EntityNullException, DuplicateElementException, RequiredFieldMissingException {
         MechanicService service = new MechanicServiceImp(dao);
         service.addMechanic(null);
     }
 
     @Test
-    public void createDuplicateMechanicTest() throws EntityNullException {
+    public void addMechanicDuplicateTest() throws EntityNullException {
         boolean exceptionThrown = false;
         int existingNumber = 50;
         when(dao.findByNumber(existingNumber)).thenReturn(
@@ -90,7 +91,7 @@ public class MechanicServiceImpTest {
                     .phone("200503132")
                     .build()
             );
-        } catch(DuplicateElementException de) {
+        } catch(DuplicateElementException | RequiredFieldMissingException de) {
             Assert.assertEquals(String.format("Mechanic with number %s already exists.", existingNumber),
                     de.getMessage());
             exceptionThrown = true;
@@ -98,6 +99,17 @@ public class MechanicServiceImpTest {
 
         Assert.assertTrue(exceptionThrown);
         verify(dao, times(1)).findByNumber(existingNumber);
+    }
+
+    @Test(expected = RequiredFieldMissingException.class)
+    public void addMechanicNumberNullTest() throws EntityNullException, DuplicateElementException, RequiredFieldMissingException {
+        MechanicService service = new MechanicServiceImp(dao);
+        service.addMechanic(new MechanicBuilder()
+                .name("Test Mechanic")
+                .startDate(LocalDateTime.of(2019, 10, 10, 8, 40))
+                .phone("200503132")
+                .build()
+        );
     }
 
     @Test
