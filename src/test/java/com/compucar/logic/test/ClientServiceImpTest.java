@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
@@ -32,7 +33,7 @@ public class ClientServiceImpTest {
     @Test
     public void addClientOkTest() throws EntityNullException, DuplicateElementException {
         Long expectedId = 20L;
-        when(dao.findByNumber(anyInt())).thenReturn(null);
+        when(dao.findByNumber(anyInt())).thenReturn(Optional.empty());
         when(dao.save(isA(Client.class))).thenReturn(
                 new ClientBuilder()
                         .id(expectedId)
@@ -75,14 +76,17 @@ public class ClientServiceImpTest {
     public void createDuplicateClientTest() throws EntityNullException {
         boolean exceptionThrown = false;
         int existingNumber = 35;
-        when(dao.findByNumber(existingNumber).get()).thenReturn(
-                new ClientBuilder()
-                        .name("Test Client Exist")
-                        .email("exist@email.com")
-                        .number(existingNumber)
-                        .phone("200003732")
-                        .type(ClientType.PERSON)
-                        .build()
+        when(dao.findByNumber(existingNumber)).thenReturn(
+                Optional.of(
+                        new ClientBuilder()
+                                .name("Test Client Exist")
+                                .email("exist@email.com")
+                                .number(existingNumber)
+                                .phone("200003732")
+                                .type(ClientType.PERSON)
+                                .build()
+                )
+
         );
 
         ClientService service = new ClientServiceImp(dao);

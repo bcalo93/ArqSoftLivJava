@@ -46,15 +46,15 @@ public class MechanicController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Mechanic post(@RequestBody MechanicDto mechanicDto) throws EntityNullException, DuplicateElementException {
-        Mechanic mechanic = convertToEntity(mechanicDto);
-        return this.mechanicService.addMechanic(mechanic);
+    public MechanicDto post(@RequestBody MechanicDto mechanicDto) throws EntityNullException, DuplicateElementException {
+        return this.convertToDto(this.mechanicService.addMechanic(this.convertToEntity(mechanicDto)));
     }
 
     @PutMapping(value = "/{mechanicId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public Mechanic put(@PathVariable("mechanicId")Long mechanicId, @RequestBody Mechanic mechanic) throws IdNullException, NotFoundException, EntityNullException {
-        return this.mechanicService.updateMechanic(mechanicId, mechanic);
+    public MechanicDto put(@PathVariable("mechanicId")Long mechanicId, @RequestBody MechanicDto mechanicDto) throws
+            IdNullException, NotFoundException, EntityNullException {
+        return this.convertToDto(this.mechanicService.updateMechanic(mechanicId, convertToEntity(mechanicDto)));
     }
 
     @DeleteMapping(value = "/{mechanicId}")

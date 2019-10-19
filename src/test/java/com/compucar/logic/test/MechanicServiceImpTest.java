@@ -13,14 +13,10 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.cglib.core.Local;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
@@ -35,7 +31,7 @@ public class MechanicServiceImpTest {
     public void addMechanicOkTest() throws EntityNullException, DuplicateElementException {
         Long expectedId = 20L;
         LocalDateTime expectedDate = LocalDateTime.of(2018, 6, 27, 10, 30);
-        when(dao.findByNumber(anyInt())).thenReturn(null);
+        when(dao.findByNumber(anyInt())).thenReturn(Optional.empty());
         when(dao.save(isA(Mechanic.class))).thenReturn(
                 new MechanicBuilder()
                         .id(expectedId)
@@ -75,13 +71,14 @@ public class MechanicServiceImpTest {
     public void createDuplicateMechanicTest() throws EntityNullException {
         boolean exceptionThrown = false;
         int existingNumber = 50;
-        when(dao.findByNumber(existingNumber).get()).thenReturn(
-                new MechanicBuilder()
-                        .name("Test Client Exist")
-                        .startDate(LocalDateTime.of(2017, 1, 19, 1, 20))
-                        .number(existingNumber)
-                        .phone("220003732")
-                        .build()
+        when(dao.findByNumber(existingNumber)).thenReturn(
+                Optional.of(
+                        new MechanicBuilder()
+                                .name("Test Client Exist")
+                                .startDate(LocalDateTime.of(2017, 1, 19, 1, 20))
+                                .number(existingNumber).phone("220003732")
+                                .build())
+
         );
 
         MechanicService service = new MechanicServiceImp(dao);
@@ -100,7 +97,7 @@ public class MechanicServiceImpTest {
         }
 
         Assert.assertTrue(exceptionThrown);
-        verify(dao, times(1)).findByNumber(existingNumber).get();
+        verify(dao, times(1)).findByNumber(existingNumber);
     }
 
     @Test

@@ -39,7 +39,8 @@ public class ClientController {
 
     @PutMapping(value = "/{clientId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public Client put(@PathVariable("clientId")Long clientId, @RequestBody Client client) throws IdNullException, NotFoundException, EntityNullException {
+    public Client put(@PathVariable("clientId")Long clientId, @RequestBody Client client) throws IdNullException,
+            NotFoundException, EntityNullException {
         return this.clientService.updateClient(clientId, client);
     }
 
