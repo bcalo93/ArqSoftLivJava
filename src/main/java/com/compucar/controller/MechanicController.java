@@ -30,7 +30,7 @@ public class MechanicController {
 
     @GetMapping(value = "/{mechanicId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public MechanicDto get(@PathVariable("mechanicId")Long mechanicId) throws IdNullException, NotFoundException {
+    public MechanicDto get(@PathVariable("mechanicId") Long mechanicId) throws IdNullException, NotFoundException {
         Mechanic mechanic = this.mechanicService.getMechanic(mechanicId);
         return entityDtoConverter.convertToDto(mechanic);
     }
@@ -44,7 +44,7 @@ public class MechanicController {
 
     @PutMapping(value = "/{mechanicId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public MechanicDto put(@PathVariable("mechanicId")Long mechanicId, @RequestBody MechanicDto mechanicDto) throws
+    public MechanicDto put(@PathVariable("mechanicId") Long mechanicId, @RequestBody MechanicDto mechanicDto) throws
             IdNullException, NotFoundException, EntityNullException {
         return entityDtoConverter.convertToDto(this.mechanicService.updateMechanic(mechanicId,
                 entityDtoConverter.convertToEntity(mechanicDto)));
@@ -52,7 +52,7 @@ public class MechanicController {
 
     @DeleteMapping(value = "/{mechanicId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("mechanicId")Long mechanicId) throws IdNullException {
+    public void delete(@PathVariable("mechanicId") Long mechanicId) throws IdNullException {
         this.mechanicService.deleteMechanic(mechanicId);
     }
 }

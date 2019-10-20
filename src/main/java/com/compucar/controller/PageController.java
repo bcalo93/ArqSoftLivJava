@@ -22,7 +22,7 @@ public class PageController {
 
     @Autowired
     private EntityDtoConverter<Mechanic, MechanicDto> entityDtoConverter;
-    
+
     @RequestMapping(value = "/clients", method = RequestMethod.GET)
     public String clientsList(Model model) {
         model.addAttribute("clients", this.clientService.getAllClients());

@@ -13,7 +13,8 @@ public class Workshop extends MaintenanceItem {
     private String address;
     private String city;
 
-    public Workshop() {}
+    public Workshop() {
+    }
 
     public Workshop(String code) {
         this.setCode(code);

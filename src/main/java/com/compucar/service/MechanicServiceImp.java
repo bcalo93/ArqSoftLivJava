@@ -23,13 +23,13 @@ public class MechanicServiceImp implements MechanicService {
     @Override
     @CacheEvict(value = "mechanics", allEntries = true)
     public Mechanic addMechanic(Mechanic mechanic) throws DuplicateElementException, EntityNullException, RequiredFieldMissingException {
-        if(mechanic == null) {
+        if (mechanic == null) {
             throw new EntityNullException("The mechanic is null.");
         }
-        if(mechanic.getNumber() == null) {
+        if (mechanic.getNumber() == null) {
             throw new RequiredFieldMissingException("Number");
         }
-        if(this.mechanicDao.findByNumber(mechanic.getNumber()).isPresent()) {
+        if (this.mechanicDao.findByNumber(mechanic.getNumber()).isPresent()) {
             throw new DuplicateElementException(String.format("Mechanic with number %s", mechanic.getNumber()));
         }
         return this.mechanicDao.save(mechanic);
@@ -38,14 +38,14 @@ public class MechanicServiceImp implements MechanicService {
     @Override
     @CacheEvict(value = "mechanics", allEntries = true)
     public Mechanic updateMechanic(Long id, Mechanic mechanic) throws NotFoundException, IdNullException, EntityNullException {
-        if(id == null) {
+        if (id == null) {
             throw new IdNullException("The mechanic id is null.");
         }
-        if(mechanic == null) {
+        if (mechanic == null) {
             throw new EntityNullException("The mechanic is null.");
         }
         Mechanic toUpdate = this.mechanicDao.findOne(id);
-        if(toUpdate == null) {
+        if (toUpdate == null) {
             throw new NotFoundException(String.format("Mechanic with id %s", id));
         }
         toUpdate.update(mechanic);
@@ -55,11 +55,11 @@ public class MechanicServiceImp implements MechanicService {
     @Override
     @CacheEvict(value = "mechanics", allEntries = true)
     public void deleteMechanic(Long id) throws IdNullException {
-        if(id == null) {
+        if (id == null) {
             throw new IdNullException("The mechanic id is null.");
         }
         Mechanic toDelete = this.mechanicDao.findOne(id);
-        if(toDelete != null) {
+        if (toDelete != null) {
             this.mechanicDao.delete(toDelete);
         }
     }
@@ -67,11 +67,11 @@ public class MechanicServiceImp implements MechanicService {
     @Override
     @Cacheable(value = "mechanics")
     public Mechanic getMechanic(Long id) throws NotFoundException, IdNullException {
-        if(id == null) {
+        if (id == null) {
             throw new IdNullException("The mechanic id is null.");
         }
         Mechanic foundMechanic = this.mechanicDao.findOne(id);
-        if(foundMechanic == null) {
+        if (foundMechanic == null) {
             throw new NotFoundException(String.format("Mechanic with id %s", id));
         }
         return foundMechanic;

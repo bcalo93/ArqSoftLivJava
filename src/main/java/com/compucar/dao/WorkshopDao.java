@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface WorkshopDao extends JpaRepository<Workshop, Long> {
     Optional<Workshop> findById(Long id);
+
     Optional<Workshop> findByCode(String code);
 
     List<Workshop> findAll();

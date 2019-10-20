@@ -24,7 +24,7 @@ public class ClientController {
 
     @GetMapping(value = "/{clientId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public Client get(@PathVariable("clientId")Long clientId) throws IdNullException, NotFoundException {
+    public Client get(@PathVariable("clientId") Long clientId) throws IdNullException, NotFoundException {
         return this.clientService.getClient(clientId);
     }
 
@@ -36,14 +36,14 @@ public class ClientController {
 
     @PutMapping(value = "/{clientId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public Client put(@PathVariable("clientId")Long clientId, @RequestBody Client client) throws IdNullException,
+    public Client put(@PathVariable("clientId") Long clientId, @RequestBody Client client) throws IdNullException,
             NotFoundException, EntityNullException {
         return this.clientService.updateClient(clientId, client);
     }
 
     @DeleteMapping(value = "/{clientId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("clientId")Long clientId) throws IdNullException {
+    public void delete(@PathVariable("clientId") Long clientId) throws IdNullException {
         this.clientService.deleteClient(clientId);
     }
 }

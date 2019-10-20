@@ -50,7 +50,7 @@ public class ReaderServiceImpl implements ReaderService {
     public Reader addReader(Reader reader) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException {
         log.info("adding reader {} ", reader);
         validateReaderAdd(reader);
-        if(reader.getWorkshop() != null) {
+        if (reader.getWorkshop() != null) {
             String workshopCode = reader.getWorkshop().getCode();
             Workshop workshop = workshopDao.findByCode(workshopCode).orElseThrow(() -> new NotFoundException("Workshop with code " + workshopCode));
             reader.setWorkshop(workshop);
@@ -63,7 +63,7 @@ public class ReaderServiceImpl implements ReaderService {
     public Reader updateReader(Reader reader) throws RequiredFieldMissingException, NotFoundException, InvalidFieldValueException {
         log.info("updating reader {} ", reader);
         validateReaderUpdate(reader);
-        if(reader.getWorkshop() != null) {
+        if (reader.getWorkshop() != null) {
             String workshopCode = reader.getWorkshop().getCode();
             Workshop workshop = workshopDao.findByCode(workshopCode).orElseThrow(() -> new NotFoundException("Workshop with code " + workshopCode));
             reader.setWorkshop(workshop);
@@ -75,7 +75,7 @@ public class ReaderServiceImpl implements ReaderService {
     @CacheEvict(value = "readers", allEntries = true)
     public void removeReader(Long id) throws NotFoundException {
         log.info("removing reader {} ", id);
-        if(!readerDao.exists(id)) {
+        if (!readerDao.exists(id)) {
             throw new NotFoundException("Reader with id " + id);
         }
         readerDao.delete(id);
@@ -85,11 +85,11 @@ public class ReaderServiceImpl implements ReaderService {
         log.info("validating reader {} ", reader);
         validateRequiredFields(reader);
 
-        if(reader.getId() != null && readerDao.exists(reader.getId())) {
+        if (reader.getId() != null && readerDao.exists(reader.getId())) {
             log.info("duplicate reader id {} ", reader.getId());
             throw new DuplicateElementException("Reader with id " + reader.getId());
         }
-        if(reader.getCode() != null && readerDao.existsByCode(reader.getCode())) {
+        if (reader.getCode() != null && readerDao.existsByCode(reader.getCode())) {
             log.info("duplicate reader code {} ", reader.getCode());
             throw new DuplicateElementException("Reader with code " + reader.getCode());
         }
@@ -99,19 +99,19 @@ public class ReaderServiceImpl implements ReaderService {
         log.info("validating reader {} ", reader);
         validateRequiredFields(reader);
 
-        if(reader.getId() == null || !readerDao.exists(reader.getId())) {
+        if (reader.getId() == null || !readerDao.exists(reader.getId())) {
             log.info("reader with id {} not found", reader.getId());
             throw new NotFoundException("Reader with id " + reader.getId());
         }
         Reader readerLookupById = readerDao.findById(reader.getId()).get();
-        if(!readerLookupById.getCode().equalsIgnoreCase(reader.getCode())) {
+        if (!readerLookupById.getCode().equalsIgnoreCase(reader.getCode())) {
             log.info("attempting to change reader code {} ", readerLookupById.getCode());
             throw new InvalidFieldValueException("Reader code can not be modified");
         }
     }
 
     private void validateRequiredFields(Reader reader) throws RequiredFieldMissingException {
-        if(reader.getCode() == null || reader.getCode().trim().isEmpty()) {
+        if (reader.getCode() == null || reader.getCode().trim().isEmpty()) {
             log.info("reader code missing");
             throw new RequiredFieldMissingException("Code");
         }
