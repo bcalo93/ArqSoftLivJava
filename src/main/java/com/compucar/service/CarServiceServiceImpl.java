@@ -49,22 +49,22 @@ public class CarServiceServiceImpl implements CarServiceService {
         log.info("adding service {} ", service);
         validateServiceAdd(service);
 
-        if(service.getClient() != null) {
+        if (service.getClient() != null) {
             Integer clientNumber = service.getClient().getNumber();
             Client client = clientDao.findByNumber(clientNumber).orElseThrow(() -> new NotFoundException("Client with number " + clientNumber));
             service.setClient(client);
         }
-        if(service.getReader() != null) {
+        if (service.getReader() != null) {
             String readerCode = service.getReader().getCode();
             Reader reader = readerDao.findByCode(readerCode).orElseThrow(() -> new NotFoundException("Reader with code " + readerCode));
             service.setReader(reader);
         }
-        if(service.getWorkshop() != null) {
+        if (service.getWorkshop() != null) {
             String workshopCode = service.getWorkshop().getCode();
             Workshop workshop = workshopDao.findByCode(workshopCode).orElseThrow(() -> new NotFoundException("Workshop with code " + workshopCode));
             service.setWorkshop(workshop);
         }
-        if(service.getMechanic() != null) {
+        if (service.getMechanic() != null) {
             Integer mechanicNumber = service.getMechanic().getNumber();
             Mechanic mechanic = mechanicDao.findByNumber(mechanicNumber).orElseThrow(() -> new NotFoundException("Mechanic with number " + mechanicNumber));
             service.setMechanic(mechanic);
@@ -75,43 +75,43 @@ public class CarServiceServiceImpl implements CarServiceService {
     private void validateServiceAdd(CarService service) throws DuplicateElementException, RequiredFieldMissingException, InvalidFieldValueException {
         log.info("validating service {} ", service);
 
-        if(service.getId() != null && carServiceDao.exists(service.getId())) {
+        if (service.getId() != null && carServiceDao.exists(service.getId())) {
             log.info("duplicate service id {} ", service.getId());
             throw new DuplicateElementException("Service with id " + service.getId());
         }
-        if(service.getCode() != null && carServiceDao.existsByCode(service.getCode())) {
+        if (service.getCode() != null && carServiceDao.existsByCode(service.getCode())) {
             log.info("duplicate service code {} ", service.getCode());
             throw new DuplicateElementException("Service with code " + service.getCode());
         }
-        if(service.getCode() == null || service.getCode().trim().isEmpty()) {
+        if (service.getCode() == null || service.getCode().trim().isEmpty()) {
             log.info("service code missing");
             throw new RequiredFieldMissingException("Code");
         }
-        if(service.getDate() == null || service.getDate().isAfter(LocalDateTime.now())) {
+        if (service.getDate() == null || service.getDate().isAfter(LocalDateTime.now())) {
             log.info("service date after today");
             throw new InvalidFieldValueException("Date after today");
         }
-        if(service.getServiceTime() < 0) {
+        if (service.getServiceTime() < 0) {
             log.info("service duration is negative");
             throw new InvalidFieldValueException("Negative duration value");
         }
-        if(service.getCost() < 0) {
+        if (service.getCost() < 0) {
             log.info("service cost is negative");
             throw new InvalidFieldValueException("Negative cost value");
         }
-        if(service.getClient() == null) {
+        if (service.getClient() == null) {
             log.info("service client missing");
             throw new RequiredFieldMissingException("Client");
         }
-        if(service.getReader() == null) {
+        if (service.getReader() == null) {
             log.info("service reader missing");
             throw new RequiredFieldMissingException("Reader");
         }
-        if(service.getWorkshop() == null) {
+        if (service.getWorkshop() == null) {
             log.info("service workshop missing");
             throw new RequiredFieldMissingException("Workshop");
         }
-        if(service.getMechanic() == null) {
+        if (service.getMechanic() == null) {
             log.info("service mechanic missing");
             throw new RequiredFieldMissingException("Mechanic");
         }

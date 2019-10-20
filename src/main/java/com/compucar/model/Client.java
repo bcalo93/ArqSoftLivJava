@@ -16,7 +16,8 @@ public class Client extends Contact {
     @Enumerated(EnumType.STRING)
     private ClientType type;
 
-    public Client() {}
+    public Client() {
+    }
 
     public Client(Integer number) {
         this.setNumber(number);

@@ -32,8 +32,9 @@ public class MechanicController {
     @GetMapping(value = "/{mechanicId}")
     @ResponseStatus(value = HttpStatus.OK)
     @AspectExecution
-    public MechanicDto getMechanic(@PathVariable("mechanicId")Long mechanicId) throws IdNullException, NotFoundException {
-        return entityDtoConverter.convertToDto(mechanicService.getMechanic(mechanicId));
+    public MechanicDto get(@PathVariable("mechanicId") Long mechanicId) throws IdNullException, NotFoundException {
+        Mechanic mechanic = this.mechanicService.getMechanic(mechanicId);
+        return entityDtoConverter.convertToDto(mechanic);
     }
 
     @PostMapping
@@ -47,7 +48,7 @@ public class MechanicController {
     @PutMapping(value = "/{mechanicId}")
     @ResponseStatus(value = HttpStatus.OK)
     @AspectExecution
-    public MechanicDto updateMechanic(@PathVariable("mechanicId")Long mechanicId, @RequestBody MechanicDto mechanicDto) throws
+    public MechanicDto updateMechanic(@PathVariable("mechanicId") Long mechanicId, @RequestBody MechanicDto mechanicDto) throws
             IdNullException, NotFoundException, EntityNullException {
         return entityDtoConverter.convertToDto(mechanicService.updateMechanic(mechanicId,
                 entityDtoConverter.convertToEntity(mechanicDto)));
@@ -56,7 +57,7 @@ public class MechanicController {
     @DeleteMapping(value = "/{mechanicId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @AspectExecution
-    public void deleteMechanic(@PathVariable("mechanicId")Long mechanicId) throws IdNullException {
+    public void deleteMechanic(@PathVariable("mechanicId") Long mechanicId) throws IdNullException {
         mechanicService.deleteMechanic(mechanicId);
     }
 }

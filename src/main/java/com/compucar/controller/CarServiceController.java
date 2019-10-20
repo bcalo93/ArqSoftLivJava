@@ -58,7 +58,7 @@ public class CarServiceController {
     }
 
     private CarService convertToEntity(CarServiceDto serviceDto) {
-        LocalDateTime serviceDate =  serviceDto.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime serviceDate = serviceDto.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         Client serviceClient = new Client(serviceDto.getClientCode());
         Mechanic serviceMechanic = new Mechanic(serviceDto.getMechanicCode());
         Reader serviceReader = new Reader(serviceDto.getReaderCode());

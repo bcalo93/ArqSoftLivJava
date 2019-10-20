@@ -87,7 +87,7 @@ public class MechanicServiceImpTest {
                     .phone("200503132")
                     .build()
             );
-        } catch(DuplicateElementException | RequiredFieldMissingException de) {
+        } catch (DuplicateElementException | RequiredFieldMissingException de) {
             Assert.assertEquals(String.format("Mechanic with number %s already exists.", existingNumber),
                     de.getMessage());
             exceptionThrown = true;
@@ -111,12 +111,12 @@ public class MechanicServiceImpTest {
     @Test
     public void updateMechanicOkTest() throws IdNullException, NotFoundException, EntityNullException {
         Long expectedId = 32L;
-        LocalDateTime newDate = LocalDateTime.of(2017, 10,31, 7, 20);
+        LocalDateTime newDate = LocalDateTime.of(2017, 10, 31, 7, 20);
 
         when(dao.findOne(expectedId)).thenReturn(new MechanicBuilder()
                 .id(expectedId)
                 .name("Test Mechanic Update")
-                .startDate(LocalDateTime.of(2017, 6,20, 9, 15))
+                .startDate(LocalDateTime.of(2017, 6, 20, 9, 15))
                 .number(30)
                 .phone("200003132")
                 .build()
@@ -160,8 +160,8 @@ public class MechanicServiceImpTest {
         try {
             service.updateMechanic(expectedId, new Mechanic());
 
-        } catch(NotFoundException ne) {
-            Assert.assertEquals(String.format("Mechanic with id %s was not found.",expectedId), ne.getMessage());
+        } catch (NotFoundException ne) {
+            Assert.assertEquals(String.format("Mechanic with id %s was not found.", expectedId), ne.getMessage());
             exceptionThrown = true;
         }
         Assert.assertTrue(exceptionThrown);
@@ -245,7 +245,7 @@ public class MechanicServiceImpTest {
     @Test
     public void getMechanicOkTest() throws NotFoundException, IdNullException {
         Long expectedId = 50L;
-        LocalDateTime expectedDate = LocalDateTime.of(2013, 2,15, 1, 0);
+        LocalDateTime expectedDate = LocalDateTime.of(2013, 2, 15, 1, 0);
         when(dao.findOne(expectedId)).thenReturn(new MechanicBuilder()
                 .id(expectedId)
                 .name("Test Mechanic Get")
@@ -275,7 +275,7 @@ public class MechanicServiceImpTest {
         try {
             service.getMechanic(20L);
 
-        } catch(NotFoundException ne) {
+        } catch (NotFoundException ne) {
             Assert.assertEquals("Mechanic with id 20 was not found.", ne.getMessage());
             exceptionThrown = true;
         }

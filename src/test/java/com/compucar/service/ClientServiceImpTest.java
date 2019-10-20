@@ -94,7 +94,7 @@ public class ClientServiceImpTest {
                     .type(ClientType.COMPANY)
                     .build()
             );
-        } catch(DuplicateElementException | RequiredFieldMissingException de) {
+        } catch (DuplicateElementException | RequiredFieldMissingException de) {
             Assert.assertEquals(String.format("Client with number %s already exists.", existingNumber),
                     de.getMessage());
             exceptionThrown = true;
@@ -167,7 +167,7 @@ public class ClientServiceImpTest {
         ClientService service = new ClientServiceImp(dao);
         try {
             service.updateClient(100L, new Client());
-        } catch(NotFoundException ne) {
+        } catch (NotFoundException ne) {
             Assert.assertEquals("Client with id 100 was not found.", ne.getMessage());
             exceptionThrown = true;
         }
@@ -286,7 +286,7 @@ public class ClientServiceImpTest {
         try {
             service.getClient(20L);
 
-        } catch(NotFoundException ne) {
+        } catch (NotFoundException ne) {
             Assert.assertEquals("Client with id 20 was not found.", ne.getMessage());
             exceptionThrown = true;
         }

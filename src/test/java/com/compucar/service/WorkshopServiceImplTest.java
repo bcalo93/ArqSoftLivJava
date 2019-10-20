@@ -22,6 +22,7 @@ import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.*;
 
 public class WorkshopServiceImplTest {
+
     private WorkshopDao workshopDao;
     private ReaderDao readerDao;
 
@@ -76,9 +77,11 @@ public class WorkshopServiceImplTest {
         when(workshopDao.findById(workshopId)).thenReturn(Optional.empty());
 
         WorkshopService service = new WorkshopServiceImpl(workshopDao, readerDao);
-        Workshop result = service.getWorkshop(workshopId);
-
-        verify(workshopDao, times(1)).findById(workshopId);
+        try {
+            Workshop result = service.getWorkshop(workshopId);
+        } finally {
+            verify(workshopDao, times(1)).findById(workshopId);
+        }
     }
 
     @Test
@@ -109,9 +112,11 @@ public class WorkshopServiceImplTest {
         when(workshopDao.existsByCode(duplicateCodeWorkshop.getCode())).thenReturn(true);
         WorkshopService service = new WorkshopServiceImpl(workshopDao, readerDao);
 
-        Workshop result = service.addWorkshop(duplicateCodeWorkshop);
-
-        verify(workshopDao, times(1)).existsByCode(duplicateCodeWorkshop.getCode());
+        try {
+            Workshop result = service.addWorkshop(duplicateCodeWorkshop);
+        } finally {
+            verify(workshopDao, times(1)).existsByCode(duplicateCodeWorkshop.getCode());
+        }
     }
 
     @Test(expected = RequiredFieldMissingException.class)
@@ -183,9 +188,11 @@ public class WorkshopServiceImplTest {
         when(workshopDao.exists(workshopId)).thenReturn(false);
 
         WorkshopService service = new WorkshopServiceImpl(workshopDao, readerDao);
-        Workshop result = service.updateWorkshop(nonExistentWorkshop);
-
-        verify(workshopDao, times(1)).exists(workshopId);
+        try {
+            Workshop result = service.updateWorkshop(nonExistentWorkshop);
+        } finally {
+            verify(workshopDao, times(1)).exists(workshopId);
+        }
     }
 
     @Test(expected = InvalidFieldValueException.class)
@@ -206,10 +213,12 @@ public class WorkshopServiceImplTest {
         when(workshopDao.findById(workshopId)).thenReturn(Optional.of(originalWorkshop));
 
         WorkshopService service = new WorkshopServiceImpl(workshopDao, readerDao);
-        Workshop result = service.updateWorkshop(updatedWorkshop);
-
-        verify(workshopDao, times(1)).exists(workshopId);
-        verify(workshopDao, times(1)).findById(workshopId);
+        try {
+            Workshop result = service.updateWorkshop(updatedWorkshop);
+        } finally {
+            verify(workshopDao, times(1)).exists(workshopId);
+            verify(workshopDao, times(1)).findById(workshopId);
+        }
     }
 
     @Test
@@ -237,10 +246,10 @@ public class WorkshopServiceImplTest {
         workshopToDelete.setId(workshopId);
         workshopToDelete.setCode("Isa Code");
         workshopToDelete.setName("Isa name");
-        for(int i=0; i<3; i++) {
+        for (int i = 0; i < 3; i++) {
             Reader reader = new Reader();
             reader.setId(Long.valueOf(i));
-            reader.setCode("Acode"+i);
+            reader.setCode("Acode" + i);
             reader.setWorkshop(workshopToDelete);
 
             readersInWorkshop.add(reader);
@@ -266,9 +275,11 @@ public class WorkshopServiceImplTest {
         when(workshopDao.exists(workshopId)).thenReturn(false);
 
         WorkshopService service = new WorkshopServiceImpl(workshopDao, readerDao);
-        service.removeWorkshop(workshopId);
-
-        verify(workshopDao, times(1)).exists(workshopId);
+        try {
+            service.removeWorkshop(workshopId);
+        } finally {
+            verify(workshopDao, times(1)).exists(workshopId);
+        }
     }
 
     @After
