@@ -104,7 +104,7 @@ public class ReaderServiceImpl implements ReaderService {
             throw new NotFoundException("Reader with id " + reader.getId());
         }
         Reader readerLookupById = readerDao.findById(reader.getId()).get();
-        if (!readerLookupById.getCode().equalsIgnoreCase(reader.getCode())) {
+        if(!readerLookupById.getCode().equalsIgnoreCase(reader.getCode())) {
             log.info("attempting to change reader code {} ", readerLookupById.getCode());
             throw new InvalidFieldValueException("Reader code can not be modified");
         }
