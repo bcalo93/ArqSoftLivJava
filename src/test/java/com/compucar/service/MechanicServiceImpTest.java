@@ -1,19 +1,14 @@
-package com.compucar.logic.test;
+package com.compucar.service;
 
 import com.compucar.builder.MechanicBuilder;
 import com.compucar.dao.MechanicDao;
 import com.compucar.model.Mechanic;
-import com.compucar.service.MechanicService;
-import com.compucar.service.MechanicServiceImp;
-import com.compucar.service.exceptions.DuplicateElementException;
-import com.compucar.service.exceptions.EntityNullException;
-import com.compucar.service.exceptions.IdNullException;
-import com.compucar.service.exceptions.NotFoundException;
-import com.compucar.service.exceptions.RequiredFieldMissingException;
+import com.compucar.service.exceptions.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +23,7 @@ public class MechanicServiceImpTest {
     public void initTest() {
         this.dao = mock(MechanicDao.class);
     }
+
     @Test
     public void addMechanicOkTest() throws EntityNullException, DuplicateElementException, RequiredFieldMissingException {
         Long expectedId = 20L;

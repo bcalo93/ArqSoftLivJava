@@ -39,5 +39,4 @@ public class MechanicBuilder {
     public Mechanic build() {
         return this.mechanic;
     }
-
 }

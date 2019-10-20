@@ -2,11 +2,7 @@ package com.compucar.service;
 
 import com.compucar.dao.ClientDao;
 import com.compucar.model.Client;
-import com.compucar.service.exceptions.DuplicateElementException;
-import com.compucar.service.exceptions.EntityNullException;
-import com.compucar.service.exceptions.IdNullException;
-import com.compucar.service.exceptions.NotFoundException;
-import com.compucar.service.exceptions.RequiredFieldMissingException;
+import com.compucar.service.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;

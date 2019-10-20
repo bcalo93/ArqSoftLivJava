@@ -5,6 +5,7 @@ import com.compucar.dao.WorkshopDao;
 import com.compucar.model.Reader;
 import com.compucar.model.Workshop;
 import com.compucar.service.exceptions.DuplicateElementException;
+import com.compucar.service.exceptions.InvalidFieldValueException;
 import com.compucar.service.exceptions.NotFoundException;
 import com.compucar.service.exceptions.RequiredFieldMissingException;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -25,6 +25,11 @@ public class WorkshopServiceImpl implements WorkshopService {
 
     @Autowired
     private ReaderDao readerDao;
+
+    public WorkshopServiceImpl(WorkshopDao dao, ReaderDao readerDao) {
+        this.workshopDao = dao;
+        this.readerDao = readerDao;
+    }
 
     @Override
     @Cacheable(value = "workshops")
@@ -50,10 +55,10 @@ public class WorkshopServiceImpl implements WorkshopService {
 
     @Override
     @CacheEvict(value = "workshops", allEntries = true)
-    public void updateWorkshop(Workshop workshop) throws NotFoundException, RequiredFieldMissingException, DuplicateElementException {
+    public Workshop updateWorkshop(Workshop workshop) throws NotFoundException, RequiredFieldMissingException, InvalidFieldValueException {
         log.info("updating workshop {} ", workshop);
         validateWorkshopUpdate(workshop);
-        workshopDao.save(workshop);
+        return workshopDao.save(workshop);
     }
 
     @Override
@@ -89,7 +94,7 @@ public class WorkshopServiceImpl implements WorkshopService {
         }
     }
 
-    private void validateWorkshopUpdate(Workshop workshop) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException {
+    private void validateWorkshopUpdate(Workshop workshop) throws RequiredFieldMissingException, NotFoundException, InvalidFieldValueException {
         log.info("validating workshop {} ", workshop);
         validateRequiredFields(workshop);
 
@@ -97,10 +102,10 @@ public class WorkshopServiceImpl implements WorkshopService {
             log.info("workshop with id {} not found", workshop.getId());
             throw new NotFoundException("Workshop with id " + workshop.getId());
         }
-        Optional<Workshop> workshopLookupByCode = workshopDao.findByCode(workshop.getCode());
-        if(workshopLookupByCode.isPresent() && workshopLookupByCode.get().getId() != workshop.getId()) {
-            log.info("duplicate workshop code {} ", workshop.getCode());
-            throw new DuplicateElementException("Workshop with code " + workshop.getCode());
+        Workshop workshopLookupById = workshopDao.findById(workshop.getId()).get();
+        if(!workshopLookupById.getCode().equalsIgnoreCase(workshop.getCode())) {
+            log.info("attempting to change workshop code {} ", workshopLookupById.getCode());
+            throw new InvalidFieldValueException("Workshop code can not be modified");
         }
     }
 
