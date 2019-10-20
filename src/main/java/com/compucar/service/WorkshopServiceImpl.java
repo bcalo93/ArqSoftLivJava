@@ -26,8 +26,8 @@ public class WorkshopServiceImpl implements WorkshopService {
     @Autowired
     private ReaderDao readerDao;
 
-    public WorkshopServiceImpl(WorkshopDao dao, ReaderDao readerDao) {
-        this.workshopDao = dao;
+    public WorkshopServiceImpl(WorkshopDao workshopDao, ReaderDao readerDao) {
+        this.workshopDao = workshopDao;
         this.readerDao = readerDao;
     }
 

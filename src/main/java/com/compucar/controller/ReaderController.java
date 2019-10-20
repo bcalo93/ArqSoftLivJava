@@ -4,6 +4,7 @@ import com.compucar.dto.ReaderDto;
 import com.compucar.model.Reader;
 import com.compucar.service.ReaderService;
 import com.compucar.service.exceptions.DuplicateElementException;
+import com.compucar.service.exceptions.InvalidFieldValueException;
 import com.compucar.service.exceptions.NotFoundException;
 import com.compucar.service.exceptions.RequiredFieldMissingException;
 import lombok.extern.slf4j.Slf4j;
@@ -42,14 +43,14 @@ public class ReaderController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Reader saveReader(@RequestBody ReaderDto readerDto) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException {
+    public Reader saveReader(@RequestBody ReaderDto readerDto) throws RequiredFieldMissingException, NotFoundException, DuplicateElementException {
         log.info("received  {}", readerDto);
         Reader reader = modelMapper.map(readerDto, Reader.class);
         return readerService.addReader(reader);
     }
 
     @PutMapping
-    public void updateReader(@RequestBody Reader reader) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException {//throws NotFoundException, RequiredFieldMissingException, DuplicateElementException {
+    public void updateReader(@RequestBody Reader reader) throws RequiredFieldMissingException, NotFoundException, InvalidFieldValueException {
         log.info("received  {}", reader);
         readerService.updateReader(reader);
     }

@@ -2,6 +2,7 @@ package com.compucar.service;
 
 import com.compucar.model.Reader;
 import com.compucar.service.exceptions.DuplicateElementException;
+import com.compucar.service.exceptions.InvalidFieldValueException;
 import com.compucar.service.exceptions.NotFoundException;
 import com.compucar.service.exceptions.RequiredFieldMissingException;
 
@@ -14,7 +15,7 @@ public interface ReaderService {
 
     Reader addReader(Reader reader) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException;
 
-    void updateReader(Reader reader) throws RequiredFieldMissingException, NotFoundException, DuplicateElementException;
+    Reader updateReader(Reader reader) throws RequiredFieldMissingException, NotFoundException, InvalidFieldValueException;
 
     void removeReader(Long id) throws NotFoundException;
 }

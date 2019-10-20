@@ -5,6 +5,7 @@ import com.compucar.dao.WorkshopDao;
 import com.compucar.model.Reader;
 import com.compucar.model.Workshop;
 import com.compucar.service.exceptions.DuplicateElementException;
+import com.compucar.service.exceptions.InvalidFieldValueException;
 import com.compucar.service.exceptions.NotFoundException;
 import com.compucar.service.exceptions.RequiredFieldMissingException;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -25,6 +25,11 @@ public class ReaderServiceImpl implements ReaderService {
 
     @Autowired
     private WorkshopDao workshopDao;
+
+    public ReaderServiceImpl(ReaderDao readerDao, WorkshopDao workshopDao) {
+        this.readerDao = readerDao;
+        this.workshopDao = workshopDao;
+    }
 
     @Override
     @Cacheable(value = "readers")
@@ -55,7 +60,7 @@ public class ReaderServiceImpl implements ReaderService {
 
     @Override
     @CacheEvict(value = "readers", allEntries = true)
-    public void updateReader(Reader reader) throws RequiredFieldMissingException, NotFoundException, DuplicateElementException {
+    public Reader updateReader(Reader reader) throws RequiredFieldMissingException, NotFoundException, InvalidFieldValueException {
         log.info("updating reader {} ", reader);
         validateReaderUpdate(reader);
         if(reader.getWorkshop() != null) {
@@ -63,7 +68,7 @@ public class ReaderServiceImpl implements ReaderService {
             Workshop workshop = workshopDao.findByCode(workshopCode).orElseThrow(() -> new NotFoundException("Workshop with code " + workshopCode));
             reader.setWorkshop(workshop);
         }
-        readerDao.save(reader);
+        return readerDao.save(reader);
     }
 
     @Override
@@ -90,7 +95,7 @@ public class ReaderServiceImpl implements ReaderService {
         }
     }
 
-    private void validateReaderUpdate(Reader reader) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException {
+    private void validateReaderUpdate(Reader reader) throws RequiredFieldMissingException, NotFoundException, InvalidFieldValueException {
         log.info("validating reader {} ", reader);
         validateRequiredFields(reader);
 
@@ -98,10 +103,10 @@ public class ReaderServiceImpl implements ReaderService {
             log.info("reader with id {} not found", reader.getId());
             throw new NotFoundException("Reader with id " + reader.getId());
         }
-        Optional<Reader> readerLookupByCode = readerDao.findByCode(reader.getCode());
-        if(readerLookupByCode.isPresent() && readerLookupByCode.get().getId() != reader.getId()) {
-            log.info("duplicate reader code {} ", reader.getCode());
-            throw new DuplicateElementException("Reader with code " + reader.getCode());
+        Reader readerLookupById = readerDao.findById(reader.getId()).get();
+        if(!readerLookupById.getCode().equalsIgnoreCase(reader.getCode())) {
+            log.info("attempting to change reader code {} ", readerLookupById.getCode());
+            throw new InvalidFieldValueException("Reader code can not be modified");
         }
     }
 
