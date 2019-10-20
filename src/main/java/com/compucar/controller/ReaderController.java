@@ -55,7 +55,7 @@ public class ReaderController {
 
     @PutMapping
     @AspectExecution
-    public void updateReader(@RequestBody Reader reader) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException {//throws NotFoundException, RequiredFieldMissingException, DuplicateElementException {
+    public void updateReader(@RequestBody Reader reader) throws RequiredFieldMissingException, NotFoundException, InvalidFieldValueException {
         log.info("received  {}", reader);
         readerService.updateReader(reader);
     }
