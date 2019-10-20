@@ -3,6 +3,7 @@ package com.compucar.controller;
 import com.compucar.model.Workshop;
 import com.compucar.service.WorkshopService;
 import com.compucar.service.exceptions.DuplicateElementException;
+import com.compucar.service.exceptions.InvalidFieldValueException;
 import com.compucar.service.exceptions.NotFoundException;
 import com.compucar.service.exceptions.RequiredFieldMissingException;
 import lombok.extern.slf4j.Slf4j;
@@ -41,9 +42,9 @@ public class WorkshopController {
     }
 
     @PutMapping
-    public void updateWorkshop(@RequestBody Workshop workshop) throws NotFoundException, RequiredFieldMissingException, DuplicateElementException {
+    public Workshop updateWorkshop(@RequestBody Workshop workshop) throws NotFoundException, RequiredFieldMissingException, InvalidFieldValueException {
         log.info("received  {}", workshop);
-        workshopService.updateWorkshop(workshop);
+        return workshopService.updateWorkshop(workshop);
     }
 
     @DeleteMapping(value = "/{workshopId}")

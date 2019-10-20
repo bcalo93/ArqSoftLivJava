@@ -1,15 +1,13 @@
-package com.compucar.logic.test;
+package com.compucar.service;
 
 import com.compucar.builder.ClientBuilder;
 import com.compucar.dao.ClientDao;
+import com.compucar.model.Client;
+import com.compucar.model.ClientType;
 import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
 import com.compucar.service.exceptions.NotFoundException;
-import com.compucar.service.ClientService;
-import com.compucar.service.ClientServiceImp;
-import com.compucar.model.Client;
-import com.compucar.model.ClientType;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
