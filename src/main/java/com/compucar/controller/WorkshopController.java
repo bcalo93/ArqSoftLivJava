@@ -47,7 +47,7 @@ public class WorkshopController {
 
     @PutMapping
     @AspectExecution
-    public void updateWorkshop(@RequestBody Workshop workshop) throws NotFoundException, RequiredFieldMissingException, DuplicateElementException {
+    public Workshop updateWorkshop(@RequestBody Workshop workshop) throws NotFoundException, RequiredFieldMissingException, InvalidFieldValueException {
         log.info("received  {}", workshop);
         return workshopService.updateWorkshop(workshop);
     }
