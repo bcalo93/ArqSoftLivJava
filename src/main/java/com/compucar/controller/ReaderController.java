@@ -1,5 +1,6 @@
 package com.compucar.controller;
 
+import com.compucar.aop.AspectExecution;
 import com.compucar.dto.ReaderDto;
 import com.compucar.model.Reader;
 import com.compucar.service.ReaderService;
@@ -27,12 +28,14 @@ public class ReaderController {
     private ModelMapper modelMapper;
 
     @GetMapping
+    @AspectExecution
     public List<Reader> listReaders() {
         log.info("list all readers");
         return readerService.listReaders();
     }
 
     @GetMapping(value = "/{readerId}")
+    @AspectExecution
     public Reader getReader(@PathVariable("readerId") Long id) throws NotFoundException {
         log.info("getReader {}", id);
         Reader reader = readerService.getReader(id);
@@ -43,19 +46,22 @@ public class ReaderController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Reader saveReader(@RequestBody ReaderDto readerDto) throws RequiredFieldMissingException, NotFoundException, DuplicateElementException {
+    @AspectExecution
+    public Reader saveReader(@RequestBody ReaderDto readerDto) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException {
         log.info("received  {}", readerDto);
         Reader reader = modelMapper.map(readerDto, Reader.class);
         return readerService.addReader(reader);
     }
 
     @PutMapping
-    public void updateReader(@RequestBody Reader reader) throws RequiredFieldMissingException, NotFoundException, InvalidFieldValueException {
+    @AspectExecution
+    public void updateReader(@RequestBody Reader reader) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException {//throws NotFoundException, RequiredFieldMissingException, DuplicateElementException {
         log.info("received  {}", reader);
         readerService.updateReader(reader);
     }
 
     @DeleteMapping(value = "/{readerId}")
+    @AspectExecution
     public void removeReader(@PathVariable("readerId") Long id) throws NotFoundException {
         log.info("delete reader  {}", id);
         readerService.removeReader(id);

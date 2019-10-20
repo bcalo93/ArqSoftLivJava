@@ -1,5 +1,6 @@
 package com.compucar.controller;
 
+import com.compucar.aop.AspectExecution;
 import com.compucar.dto.CarServiceDto;
 import com.compucar.model.*;
 import com.compucar.service.CarServiceService;
@@ -28,12 +29,14 @@ public class CarServiceController {
     private ModelMapper modelMapper;
 
     @GetMapping
+    @AspectExecution
     public List<CarService> listServices() {
         log.info("list all services");
         return carServiceService.listServices();
     }
 
     @GetMapping(value = "/{serviceId}")
+    @AspectExecution
     public CarService getService(@PathVariable("serviceId") Long id) throws NotFoundException {
         log.info("getService {}", id);
         CarService service = carServiceService.getService(id);
@@ -43,6 +46,7 @@ public class CarServiceController {
     }
 
     @PostMapping
+    @AspectExecution
     public CarService saveService(@RequestBody CarServiceDto serviceDto) throws
             RequiredFieldMissingException,
             DuplicateElementException,

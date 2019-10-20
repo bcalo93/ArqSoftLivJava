@@ -1,5 +1,6 @@
 package com.compucar.controller;
 
+import com.compucar.aop.AspectExecution;
 import com.compucar.model.Workshop;
 import com.compucar.service.WorkshopService;
 import com.compucar.service.exceptions.DuplicateElementException;
@@ -21,12 +22,14 @@ public class WorkshopController {
     private WorkshopService workshopService;
 
     @GetMapping
+    @AspectExecution
     public List<Workshop> listWorkshops() {
         log.info("list all workshops");
         return workshopService.listWorkshops();
     }
 
     @GetMapping(value = "/{workshopId}")
+    @AspectExecution
     public Workshop getWorkshop(@PathVariable("workshopId") Long id) throws NotFoundException {
         log.info("getWorkshop {}", id);
         Workshop workshop = workshopService.getWorkshop(id);
@@ -36,19 +39,22 @@ public class WorkshopController {
     }
 
     @PostMapping
+    @AspectExecution
     public Workshop saveWorkshop(@RequestBody Workshop workshop) throws DuplicateElementException, RequiredFieldMissingException {
         log.info("received  {}", workshop);
         return workshopService.addWorkshop(workshop);
     }
 
     @PutMapping
-    public Workshop updateWorkshop(@RequestBody Workshop workshop) throws NotFoundException, RequiredFieldMissingException, InvalidFieldValueException {
+    @AspectExecution
+    public void updateWorkshop(@RequestBody Workshop workshop) throws NotFoundException, RequiredFieldMissingException, DuplicateElementException {
         log.info("received  {}", workshop);
         return workshopService.updateWorkshop(workshop);
     }
 
     @DeleteMapping(value = "/{workshopId}")
-    public void removeWorkshop(@PathVariable("workshopId") Long id) throws NotFoundException {
+    @AspectExecution
+    public void removeWorkshop(@PathVariable("workshopId") Long id) throws NotFoundException  {
         log.info("delete workshop  {}", id);
         workshopService.removeWorkshop(id);
     }
