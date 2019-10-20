@@ -17,7 +17,7 @@ public class OperationLogServiceImp implements OperationLogService {
 
     @Override
     public void addOperationLog(OperationLog operationLog) {
-        if(isValidOperationLog(operationLog)) {
+        if (isValidOperationLog(operationLog)) {
             operationLogDao.save(operationLog);
 
         } else {

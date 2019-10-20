@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface OperationLogService {
     void addOperationLog(OperationLog operationLog);
+
     List<OperationLog> getAllOperationLogs();
 
 }
