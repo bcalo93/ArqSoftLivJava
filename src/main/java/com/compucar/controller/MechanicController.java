@@ -1,5 +1,6 @@
 package com.compucar.controller;
 
+import com.compucar.dto.EntityDtoConverter;
 import com.compucar.dto.MechanicDto;
 import com.compucar.model.Mechanic;
 import com.compucar.service.MechanicService;
@@ -7,16 +8,12 @@ import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
 import com.compucar.service.exceptions.NotFoundException;
-import org.modelmapper.ModelMapper;
+import com.compucar.service.exceptions.RequiredFieldMissingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/mechanics")
@@ -26,54 +23,40 @@ public class MechanicController {
     private MechanicService mechanicService;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private EntityDtoConverter<Mechanic, MechanicDto> entityDtoConverter;
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
     public List<MechanicDto> get() {
         List<Mechanic> mechanics = this.mechanicService.getAllMechanic();
-        return mechanics.stream()
-                .map(mechanic -> convertToDto(mechanic))
-                .collect(Collectors.toList());
+        return entityDtoConverter.convertToDtos(mechanics);
     }
 
     @GetMapping(value = "/{mechanicId}")
     @ResponseStatus(value = HttpStatus.OK)
     public MechanicDto get(@PathVariable("mechanicId")Long mechanicId) throws IdNullException, NotFoundException {
         Mechanic mechanic = this.mechanicService.getMechanic(mechanicId);
-        return convertToDto(mechanic);
+        return entityDtoConverter.convertToDto(mechanic);
     }
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Mechanic post(@RequestBody MechanicDto mechanicDto) throws EntityNullException, DuplicateElementException {
-        Mechanic mechanic = convertToEntity(mechanicDto);
-        return this.mechanicService.addMechanic(mechanic);
+    public MechanicDto post(@RequestBody MechanicDto mechanicDto) throws EntityNullException, DuplicateElementException, RequiredFieldMissingException {
+        return entityDtoConverter.convertToDto(this.mechanicService.addMechanic(entityDtoConverter
+                .convertToEntity(mechanicDto)));
     }
 
     @PutMapping(value = "/{mechanicId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public Mechanic put(@PathVariable("mechanicId")Long mechanicId, @RequestBody Mechanic mechanic) throws IdNullException, NotFoundException, EntityNullException {
-        return this.mechanicService.updateMechanic(mechanicId, mechanic);
+    public MechanicDto put(@PathVariable("mechanicId")Long mechanicId, @RequestBody MechanicDto mechanicDto) throws
+            IdNullException, NotFoundException, EntityNullException {
+        return entityDtoConverter.convertToDto(this.mechanicService.updateMechanic(mechanicId,
+                entityDtoConverter.convertToEntity(mechanicDto)));
     }
 
     @DeleteMapping(value = "/{mechanicId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("mechanicId")Long mechanicId) throws IdNullException {
         this.mechanicService.deleteMechanic(mechanicId);
-    }
-
-    private MechanicDto convertToDto(Mechanic mechanic) {
-        MechanicDto mechanicDto = modelMapper.map(mechanic, MechanicDto.class);
-        Date startDate = Date.from(mechanic.getStartDate().atZone(ZoneId.systemDefault()).toInstant());
-        mechanicDto.setStartDate(startDate);
-        return mechanicDto;
-    }
-
-    private Mechanic convertToEntity(MechanicDto mechanicDto) {
-        Mechanic mechanic = modelMapper.map(mechanicDto, Mechanic.class);
-        LocalDateTime startDate =  mechanicDto.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        mechanic.setStartDate(startDate);
-        return mechanic;
     }
 }

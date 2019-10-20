@@ -6,6 +6,7 @@ import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
 import com.compucar.service.exceptions.NotFoundException;
+import com.compucar.service.exceptions.RequiredFieldMissingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -33,13 +34,14 @@ public class ClientController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Client post(@RequestBody Client client) throws EntityNullException, DuplicateElementException {
+    public Client post(@RequestBody Client client) throws EntityNullException, DuplicateElementException, RequiredFieldMissingException {
         return this.clientService.addClient(client);
     }
 
     @PutMapping(value = "/{clientId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public Client put(@PathVariable("clientId")Long clientId, @RequestBody Client client) throws IdNullException, NotFoundException, EntityNullException {
+    public Client put(@PathVariable("clientId")Long clientId, @RequestBody Client client) throws IdNullException,
+            NotFoundException, EntityNullException {
         return this.clientService.updateClient(clientId, client);
     }
 

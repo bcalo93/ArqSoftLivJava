@@ -6,6 +6,7 @@ import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
 import com.compucar.service.exceptions.NotFoundException;
+import com.compucar.service.exceptions.RequiredFieldMissingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,11 +26,14 @@ public class ClientServiceImp implements ClientService {
 
     @Override
     @CacheEvict(value = "clients", allEntries = true)
-    public Client addClient(Client client) throws EntityNullException, DuplicateElementException {
+    public Client addClient(Client client) throws EntityNullException, DuplicateElementException, RequiredFieldMissingException {
         if(client == null) {
             throw new EntityNullException("The client is null.");
         }
-        if(this.clientDao.findByNumber(client.getNumber()) != null) {
+        if(client.getNumber() == null) {
+            throw new RequiredFieldMissingException("Number");
+        }
+        if(this.clientDao.findByNumber(client.getNumber()).isPresent()) {
             throw new DuplicateElementException(String.format("Client with number %s", client.getNumber()));
         }
         return this.clientDao.save(client);

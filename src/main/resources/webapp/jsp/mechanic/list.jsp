@@ -8,24 +8,22 @@
 
 <html>
     <div>
-        <h2>Clients</h2>
+        <h2>Mechanics</h2>
         <table border="1">
             <tr>
             <th>Id</th>
             <th>Number</th>
             <th>Name</th>
             <th>Phone</th>
-            <th>Email</th>
-            <th>Type</th>
+            <th>Start Date</th>
             </tr>
-                <c:forEach var="client" items="${clients}">
+                <c:forEach var="mechanic" items="${mechanics}">
                 <tr>
-                    <td>${client.id}
-                    <td>${client.number}</td>
-                    <td>${client.name}</td>
-                    <td>${client.phone}</td>
-                    <td>${client.email}</td>
-                    <td>${client.type}</td>
+                    <td>${mechanic.id}
+                    <td>${mechanic.number}</td>
+                    <td>${mechanic.name}</td>
+                    <td>${mechanic.phone}</td>
+                    <td><fmt:formatDate value="${mechanic.startDate}" pattern="dd/MM/yyyy" /></td>
                 </tr>
             </c:forEach>
         </table>

@@ -5,12 +5,13 @@ import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
 import com.compucar.service.exceptions.NotFoundException;
+import com.compucar.service.exceptions.RequiredFieldMissingException;
 
 import java.util.List;
 
 public interface ClientService {
 
-    Client addClient(Client client) throws EntityNullException, DuplicateElementException;
+    Client addClient(Client client) throws EntityNullException, DuplicateElementException, RequiredFieldMissingException;
 
     Client updateClient(Long clientId, Client client) throws IdNullException, EntityNullException, NotFoundException;
 

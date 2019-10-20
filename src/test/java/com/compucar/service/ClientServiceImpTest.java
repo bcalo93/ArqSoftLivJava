@@ -8,6 +8,11 @@ import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.EntityNullException;
 import com.compucar.service.exceptions.IdNullException;
 import com.compucar.service.exceptions.NotFoundException;
+import com.compucar.service.exceptions.RequiredFieldMissingException;
+import com.compucar.service.ClientService;
+import com.compucar.service.ClientServiceImp;
+import com.compucar.model.Client;
+import com.compucar.model.ClientType;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,6 +20,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
@@ -28,9 +34,9 @@ public class ClientServiceImpTest {
     }
 
     @Test
-    public void addClientOkTest() throws EntityNullException, DuplicateElementException {
+    public void addClientOkTest() throws EntityNullException, DuplicateElementException, RequiredFieldMissingException {
         Long expectedId = 20L;
-        when(dao.findByNumber(anyInt())).thenReturn(null);
+        when(dao.findByNumber(anyInt())).thenReturn(Optional.empty());
         when(dao.save(isA(Client.class))).thenReturn(
                 new ClientBuilder()
                         .id(expectedId)
@@ -64,23 +70,26 @@ public class ClientServiceImpTest {
     }
 
     @Test(expected = EntityNullException.class)
-    public void addClientNullTest() throws EntityNullException, DuplicateElementException {
+    public void addClientNullTest() throws EntityNullException, DuplicateElementException, RequiredFieldMissingException {
         ClientService service = new ClientServiceImp(dao);
         service.addClient(null);
     }
 
     @Test
-    public void createDuplicateClientTest() throws EntityNullException {
+    public void addClientDuplicateTest() throws EntityNullException {
         boolean exceptionThrown = false;
         int existingNumber = 35;
-        when(dao.findByNumber(existingNumber).get()).thenReturn(
-                new ClientBuilder()
-                        .name("Test Client Exist")
-                        .email("exist@email.com")
-                        .number(existingNumber)
-                        .phone("200003732")
-                        .type(ClientType.PERSON)
-                        .build()
+        when(dao.findByNumber(existingNumber)).thenReturn(
+                Optional.of(
+                        new ClientBuilder()
+                                .name("Test Client Exist")
+                                .email("exist@email.com")
+                                .number(existingNumber)
+                                .phone("200003732")
+                                .type(ClientType.PERSON)
+                                .build()
+                )
+
         );
 
         ClientService service = new ClientServiceImp(dao);
@@ -93,7 +102,7 @@ public class ClientServiceImpTest {
                     .type(ClientType.COMPANY)
                     .build()
             );
-        } catch(DuplicateElementException de) {
+        } catch(DuplicateElementException | RequiredFieldMissingException de) {
             Assert.assertEquals(String.format("Client with number %s already exists.", existingNumber),
                     de.getMessage());
             exceptionThrown = true;
@@ -101,6 +110,18 @@ public class ClientServiceImpTest {
 
         Assert.assertTrue(exceptionThrown);
         verify(dao, times(1)).findByNumber(existingNumber);
+    }
+
+    @Test(expected = RequiredFieldMissingException.class)
+    public void addClientNullNumberTest() throws RequiredFieldMissingException, EntityNullException, DuplicateElementException {
+        ClientService service = new ClientServiceImp(dao);
+        service.addClient(new ClientBuilder()
+                .name("Test Client 1")
+                .email("email@email.com")
+                .phone("200003132")
+                .type(ClientType.COMPANY)
+                .build()
+        );
     }
 
     @Test
