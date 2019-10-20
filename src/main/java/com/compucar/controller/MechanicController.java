@@ -1,5 +1,6 @@
 package com.compucar.controller;
 
+import com.compucar.aop.AspectExecution;
 import com.compucar.dto.EntityDtoConverter;
 import com.compucar.dto.MechanicDto;
 import com.compucar.model.Mechanic;
@@ -23,36 +24,39 @@ public class MechanicController {
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
-    public List<MechanicDto> get() {
-        List<Mechanic> mechanics = this.mechanicService.getAllMechanic();
-        return entityDtoConverter.convertToDtos(mechanics);
+    @AspectExecution
+    public List<MechanicDto> getAllMechanic() {
+        return entityDtoConverter.convertToDtos(mechanicService.getAllMechanic());
     }
 
     @GetMapping(value = "/{mechanicId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public MechanicDto get(@PathVariable("mechanicId") Long mechanicId) throws IdNullException, NotFoundException {
+    public MechanicDto get(@PathVariable("mechanicId")Long mechanicId) throws IdNullException, NotFoundException {
         Mechanic mechanic = this.mechanicService.getMechanic(mechanicId);
         return entityDtoConverter.convertToDto(mechanic);
     }
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public MechanicDto post(@RequestBody MechanicDto mechanicDto) throws EntityNullException, DuplicateElementException, RequiredFieldMissingException {
-        return entityDtoConverter.convertToDto(this.mechanicService.addMechanic(entityDtoConverter
+    @AspectExecution
+    public MechanicDto addMechanic(@RequestBody MechanicDto mechanicDto) throws EntityNullException, DuplicateElementException, RequiredFieldMissingException {
+        return entityDtoConverter.convertToDto(mechanicService.addMechanic(entityDtoConverter
                 .convertToEntity(mechanicDto)));
     }
 
     @PutMapping(value = "/{mechanicId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public MechanicDto put(@PathVariable("mechanicId") Long mechanicId, @RequestBody MechanicDto mechanicDto) throws
+    @AspectExecution
+    public MechanicDto updateMechanic(@PathVariable("mechanicId")Long mechanicId, @RequestBody MechanicDto mechanicDto) throws
             IdNullException, NotFoundException, EntityNullException {
-        return entityDtoConverter.convertToDto(this.mechanicService.updateMechanic(mechanicId,
+        return entityDtoConverter.convertToDto(mechanicService.updateMechanic(mechanicId,
                 entityDtoConverter.convertToEntity(mechanicDto)));
     }
 
     @DeleteMapping(value = "/{mechanicId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("mechanicId") Long mechanicId) throws IdNullException {
-        this.mechanicService.deleteMechanic(mechanicId);
+    @AspectExecution
+    public void deleteMechanic(@PathVariable("mechanicId")Long mechanicId) throws IdNullException {
+        mechanicService.deleteMechanic(mechanicId);
     }
 }
