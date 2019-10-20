@@ -27,7 +27,7 @@ public class ClientController {
     @GetMapping(value = "/{clientId}")
     @ResponseStatus(value = HttpStatus.OK)
     @AspectExecution
-    public Client getClient(@PathVariable("clientId")Long clientId) throws IdNullException, NotFoundException {
+    public Client get(@PathVariable("clientId") Long clientId) throws IdNullException, NotFoundException {
         return this.clientService.getClient(clientId);
     }
 
@@ -49,7 +49,7 @@ public class ClientController {
     @DeleteMapping(value = "/{clientId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @AspectExecution
-    public void deleteClient(@PathVariable("clientId")Long clientId) throws IdNullException {
+    public void deleteClient(@PathVariable("clientId") Long clientId) throws IdNullException {
         this.clientService.deleteClient(clientId);
     }
 }
