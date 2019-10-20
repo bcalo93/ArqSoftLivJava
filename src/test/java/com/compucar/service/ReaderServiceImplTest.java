@@ -153,10 +153,9 @@ public class ReaderServiceImplTest {
         when(workshopDao.findByCode(nonExistentWorkshop.getCode())).thenReturn(Optional.empty());
         ReaderService service = new ReaderServiceImpl(readerDao, workshopDao);
 
-        try{
+        try {
             Reader result = service.addReader(newReader);
-        }
-        finally {
+        } finally {
             verify(readerDao, times(1)).existsByCode(newReader.getCode());
             verify(workshopDao, times(1)).findByCode(nonExistentWorkshop.getCode());
         }
