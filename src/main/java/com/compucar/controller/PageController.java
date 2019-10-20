@@ -2,9 +2,12 @@ package com.compucar.controller;
 
 import com.compucar.dto.EntityDtoConverter;
 import com.compucar.dto.MechanicDto;
+import com.compucar.dto.OperationLogDto;
 import com.compucar.model.Mechanic;
+import com.compucar.model.OperationLog;
 import com.compucar.service.ClientService;
 import com.compucar.service.MechanicService;
+import com.compucar.service.OperationLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +24,13 @@ public class PageController {
     private MechanicService mechanicService;
 
     @Autowired
-    private EntityDtoConverter<Mechanic, MechanicDto> entityDtoConverter;
+    private EntityDtoConverter<Mechanic, MechanicDto> mechanicDtoConverter;
+
+    @Autowired
+    private OperationLogService operationLogService;
+
+    @Autowired
+    private EntityDtoConverter<OperationLog, OperationLogDto> operationLogDtoConverter;
     
     @RequestMapping(value = "/clients", method = RequestMethod.GET)
     public String clientsList(Model model) {
@@ -31,7 +40,15 @@ public class PageController {
 
     @RequestMapping(value = "/mechanics", method = RequestMethod.GET)
     public String mechanicsList(Model model) {
-        model.addAttribute("mechanics", entityDtoConverter.convertToDtos(mechanicService.getAllMechanic()));
+        model.addAttribute("mechanics", mechanicDtoConverter.convertToDtos(mechanicService.getAllMechanic()));
         return "mechanic/list";
+    }
+
+    @RequestMapping(value = "/operationlogs", method = RequestMethod.GET)
+    public String operationList(Model model) {
+        model.addAttribute("operationLogs", operationLogDtoConverter.convertToDtos(operationLogService
+                .getAllOperationLogs())
+        );
+        return "operationlog/list";
     }
 }
