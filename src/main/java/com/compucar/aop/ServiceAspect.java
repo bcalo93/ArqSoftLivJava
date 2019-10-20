@@ -1,8 +1,8 @@
 package com.compucar.aop;
 
-import com.compucar.builder.TraceabilityBuilder;
-import com.compucar.model.Traceability;
-import com.compucar.service.TraceabilityService;
+import com.compucar.builder.OperationLogBuilder;
+import com.compucar.model.OperationLog;
+import com.compucar.service.OperationLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -22,7 +22,7 @@ public class ServiceAspect {
     private HttpServletRequest request;
 
     @Autowired
-    private TraceabilityService traceabilityService;
+    private OperationLogService operationLogService;
 
     @Around("@annotation(AspectExecution)")
     public Object aroundService(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -31,11 +31,11 @@ public class ServiceAspect {
     }
 
     private void saveServiceCall(String serviceName) {
-        Traceability traceability = new TraceabilityBuilder()
+        OperationLog operationLog = new OperationLogBuilder()
                 .serviceName(serviceName)
                 .username(request.getHeader("username"))
                 .registerDate(LocalDateTime.now())
                 .build();
-        this.traceabilityService.addTraceability(traceability);
+        this.operationLogService.addOperationLog(operationLog);
     }
 }

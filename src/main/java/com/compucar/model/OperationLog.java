@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-public class Traceability extends DataEntity {
+public class OperationLog extends DataEntity {
     private String username;
     private String serviceName;
     private LocalDateTime registerDate;
