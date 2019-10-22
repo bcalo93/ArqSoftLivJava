@@ -27,4 +27,13 @@ public class Reader extends MaintenanceItem {
         this();
         this.setCode(code);
     }
+
+    public boolean isAvailable(int serviceTime, int minBatteryLifeRequired) {
+
+        return (actualTimeUse + serviceTime) <= batteryLife && (batteryLife - actualTimeUse) >= Integer.valueOf(minBatteryLifeRequired);
+    }
+
+    public void addUseTime(int timeUse) {
+        actualTimeUse += timeUse;
+    }
 }

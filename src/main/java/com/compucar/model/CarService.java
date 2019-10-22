@@ -31,4 +31,8 @@ public class CarService extends MaintenanceItem {
     @ManyToOne
     @JoinColumn
     private Workshop workshop;
+
+    public void applyDiscount(int percentage) {
+        this.cost *= ((double) (100 - percentage) / 100);
+    }
 }
