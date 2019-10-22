@@ -122,6 +122,7 @@ public class CarServiceImplTest {
 
         CarService result = service.addService(newCarService);
         Assert.assertEquals(newCarService, result);
+        Assert.assertEquals(result.getReader().getActualTimeUse(), 180);
 
         verify(carServiceDao, times(1)).existsByCode(newCarService.getCode());
         verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
@@ -145,8 +146,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
         }
     }
@@ -168,8 +168,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
         }
@@ -196,8 +195,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
@@ -229,8 +227,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
@@ -265,8 +262,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
@@ -300,8 +296,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
@@ -335,8 +330,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
@@ -367,8 +361,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
             verify(readerDao, times(1)).findByCode(carServiceReader.getCode());
@@ -398,8 +391,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
@@ -429,8 +421,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
             verify(readerDao, times(1)).findByCode(carServiceReader.getCode());
@@ -460,8 +451,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(readerDao, times(1)).findByCode(carServiceReader.getCode());
@@ -496,8 +486,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
@@ -535,8 +524,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
@@ -575,8 +563,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
@@ -617,8 +604,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
@@ -659,8 +645,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
@@ -704,8 +689,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
@@ -748,8 +732,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
@@ -794,8 +777,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
@@ -843,8 +825,7 @@ public class CarServiceImplTest {
 
         try {
             CarService result = service.addService(newCarService);
-        }
-        finally {
+        } finally {
             verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
@@ -854,5 +835,54 @@ public class CarServiceImplTest {
             verify(carServiceDao, times(1)).existsByMechanicAndDateBetweenAndWorkshopNot(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class), isA(Workshop.class));
             verify(carServiceDao, times(1)).existsByClientAndDateBetween(isA(Client.class), isA(LocalDateTime.class), isA(LocalDateTime.class));
         }
+    }
+
+    @Test
+    public void addService_clientCompanyApplyDiscount() throws DuplicateElementException, InvalidFieldValueException, NotFoundException, RequiredFieldMissingException {
+        CarService newCarService = new CarService();
+        Client carServiceClient = new Client();
+        Workshop carServiceWorkshop = new Workshop();
+        Mechanic carServiceMechanic = new Mechanic();
+        Reader carServiceReader = new Reader();
+
+        carServiceClient.setNumber(1122);
+        carServiceClient.setType(ClientType.COMPANY);
+        carServiceWorkshop.setCode("WP90");
+        carServiceMechanic.setNumber(2233);
+        carServiceReader.setCode("RDR54");
+        carServiceReader.setBatteryLife(100);
+        carServiceReader.setActualTimeUse(0);
+        carServiceReader.setWorkshop(carServiceWorkshop);
+        newCarService.setCode("SF43");
+        newCarService.setDate(LocalDateTime.of(2019, 9, 9, 10, 0));
+        newCarService.setServiceTime(10);
+        newCarService.setCost(100.0);
+        newCarService.setClient(carServiceClient);
+        newCarService.setWorkshop(carServiceWorkshop);
+        newCarService.setMechanic(carServiceMechanic);
+        newCarService.setReader(carServiceReader);
+
+        when(clientDao.findByNumber(carServiceClient.getNumber())).thenReturn(Optional.of(carServiceClient));
+        when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
+        when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
+        when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
+        when(env.getProperty("minBatteryLife")).thenReturn("20");
+        when(carServiceDao.countByMechanicAndDateBetween(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class))).thenReturn(0);
+        when(carServiceDao.existsByMechanicAndDateBetweenAndWorkshopNot(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class), isA(Workshop.class))).thenReturn(false);
+        when(carServiceDao.countByClientAndDateBetween(isA(Client.class), isA(LocalDateTime.class), isA(LocalDateTime.class))).thenReturn(6);
+        when(carServiceDao.save(isA(CarService.class))).thenReturn(newCarService);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+
+        CarService result = service.addService(newCarService);
+        Assert.assertEquals(newCarService.getCost(), 80, 0);
+
+        verify(clientDao, times(1)).findByNumber(carServiceClient.getNumber());
+        verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
+        verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
+        verify(readerDao, times(1)).findByCode(carServiceReader.getCode());
+        verify(env, times(1)).getProperty("minBatteryLife");
+        verify(carServiceDao, times(1)).countByMechanicAndDateBetween(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class));
+        verify(carServiceDao, times(1)).existsByMechanicAndDateBetweenAndWorkshopNot(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class), isA(Workshop.class));
+        verify(carServiceDao, times(1)).save(newCarService);
     }
 }
