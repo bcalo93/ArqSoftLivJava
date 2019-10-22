@@ -29,4 +29,12 @@ public class Client extends Contact {
         this.setPhone(client.getPhone());
         this.setName(client.getName());
     }
+
+    public boolean isACompany() {
+        return type.equals(ClientType.COMPANY);
+    }
+
+    public boolean isAPerson() {
+        return type.equals(ClientType.PERSON);
+    }
 }

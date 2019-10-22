@@ -41,7 +41,7 @@ public class ClientController {
     @PutMapping(value = "/{clientId}")
     @ResponseStatus(value = HttpStatus.OK)
     @AspectExecution
-    public Client updateClient(@PathVariable("clientId")Long clientId, @RequestBody Client client) throws IdNullException,
+    public Client updateClient(@PathVariable("clientId") Long clientId, @RequestBody Client client) throws IdNullException,
             NotFoundException, EntityNullException {
         return this.clientService.updateClient(clientId, client);
     }
