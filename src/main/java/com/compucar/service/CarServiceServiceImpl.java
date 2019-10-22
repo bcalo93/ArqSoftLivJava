@@ -37,13 +37,18 @@ public class CarServiceServiceImpl implements CarServiceService {
     @Autowired
     private Environment env;
 
+    private final int DISCOUNT_PERCENTAGE;
+
     public CarServiceServiceImpl(CarServiceDao carServiceDao, ClientDao clientDao, MechanicDao mechanicDao,
-                                 ReaderDao readerDao, WorkshopDao workshopDao) {
+                                 ReaderDao readerDao, WorkshopDao workshopDao, Environment env) {
         this.carServiceDao = carServiceDao;
         this.clientDao = clientDao;
         this.mechanicDao = mechanicDao;
         this.readerDao = readerDao;
         this.workshopDao = workshopDao;
+        this.env = env;
+
+        DISCOUNT_PERCENTAGE = 20;
     }
 
     @Override
@@ -104,7 +109,8 @@ public class CarServiceServiceImpl implements CarServiceService {
         LocalDateTime from = LocalDateTime.of(previousMonthDate.getYear(), previousMonthDate.getMonth(), 1, 0, 0);
         LocalDateTime to = LocalDateTime.of(previousMonthDate.getYear(), previousMonthDate.getMonth(), 30, 23, 59);
         if (service.getClient().isACompany() && carServiceDao.countByClientAndDateBetween(service.getClient(), from, to) > 5) {
-            service.applyDiscount(20);
+            log.info("client is a company and has more than 5 services last month, applying {} percent discount", DISCOUNT_PERCENTAGE);
+            service.applyDiscount(DISCOUNT_PERCENTAGE);
         }
     }
 
