@@ -26,7 +26,7 @@ public class MechanicConverter extends EntityDtoConverterBase<Mechanic, Mechanic
     @Override
     public Mechanic convertToEntity(MechanicDto mechanicDto) {
         Mechanic mechanic = modelMapper.map(mechanicDto, Mechanic.class);
-        LocalDateTime startDate =  mechanicDto.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime startDate = mechanicDto.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         mechanic.setStartDate(startDate);
         return mechanic;
     }

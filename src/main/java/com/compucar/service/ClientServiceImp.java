@@ -23,13 +23,13 @@ public class ClientServiceImp implements ClientService {
     @Override
     @CacheEvict(value = "clients", allEntries = true)
     public Client addClient(Client client) throws EntityNullException, DuplicateElementException, RequiredFieldMissingException {
-        if(client == null) {
+        if (client == null) {
             throw new EntityNullException("The client is null.");
         }
-        if(client.getNumber() == null) {
+        if (client.getNumber() == null) {
             throw new RequiredFieldMissingException("Number");
         }
-        if(this.clientDao.findByNumber(client.getNumber()).isPresent()) {
+        if (this.clientDao.findByNumber(client.getNumber()).isPresent()) {
             throw new DuplicateElementException(String.format("Client with number %s", client.getNumber()));
         }
         return this.clientDao.save(client);
@@ -39,15 +39,15 @@ public class ClientServiceImp implements ClientService {
     @CacheEvict(value = "clients", allEntries = true)
     public Client updateClient(Long clientId, Client client) throws IdNullException, EntityNullException,
             NotFoundException {
-        if(clientId == null) {
+        if (clientId == null) {
             throw new IdNullException("The client id is null.");
         }
-        if(client == null) {
+        if (client == null) {
             throw new EntityNullException("The client is null.");
         }
 
         Client original = this.clientDao.findOne(clientId);
-        if(original == null) {
+        if (original == null) {
             throw new NotFoundException(String.format("Client with id %s", clientId));
         }
 
@@ -58,12 +58,12 @@ public class ClientServiceImp implements ClientService {
     @Override
     @CacheEvict(value = "clients", allEntries = true)
     public void deleteClient(Long clientId) throws IdNullException {
-        if(clientId == null) {
+        if (clientId == null) {
             throw new IdNullException("The client id is null.");
         }
 
         Client toDelete = this.clientDao.findOne(clientId);
-        if(toDelete != null) {
+        if (toDelete != null) {
             this.clientDao.delete(toDelete);
         }
     }
@@ -71,11 +71,11 @@ public class ClientServiceImp implements ClientService {
     @Override
     @Cacheable(value = "clients")
     public Client getClient(Long clientId) throws IdNullException, NotFoundException {
-        if(clientId == null) {
+        if (clientId == null) {
             throw new IdNullException("The client id is null.");
         }
         Client result = this.clientDao.findOne(clientId);
-        if(result == null) {
+        if (result == null) {
             throw new NotFoundException(String.format("Client with id %s", clientId));
         }
         return result;

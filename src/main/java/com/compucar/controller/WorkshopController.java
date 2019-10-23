@@ -54,7 +54,7 @@ public class WorkshopController {
 
     @DeleteMapping(value = "/{workshopId}")
     @AspectExecution
-    public void removeWorkshop(@PathVariable("workshopId") Long id) throws NotFoundException  {
+    public void removeWorkshop(@PathVariable("workshopId") Long id) throws NotFoundException {
         log.info("delete workshop  {}", id);
         workshopService.removeWorkshop(id);
     }

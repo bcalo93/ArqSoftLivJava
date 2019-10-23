@@ -9,20 +9,22 @@
 <html>
     <h1>Compucar</h1>
     <div>
-        <h2>Operation Logs</h2>
+        <h2>Workshops</h2>
         <table border="1">
             <tr>
                 <th>Id</th>
-                <th>Username</th>
-                <th>Service Name</th>
-                <th>Register Date</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>City</th>
             </tr>
-                <c:forEach var="operationLog" items="${operationLogs}">
+                <c:forEach var="workshop" items="${workshops}">
                 <tr>
-                    <td>${operationLog.id}</td>
-                    <td>${operationLog.username}</td>
-                    <td>${operationLog.serviceName}</td>
-                    <td><fmt:formatDate value="${operationLog.registerDate}" pattern="dd/MM/yyyy hh:mm:ss" /></td>
+                    <td>${workshop.id}</td>
+                    <td>${workshop.code}</td>
+                    <td>${workshop.name}</td>
+                    <td>${workshop.address}</td>
+                    <td>${workshop.city}</td>
                 </tr>
             </c:forEach>
         </table>

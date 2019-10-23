@@ -26,8 +26,8 @@ public class WorkshopServiceImpl implements WorkshopService {
     @Autowired
     private ReaderDao readerDao;
 
-    public WorkshopServiceImpl(WorkshopDao dao, ReaderDao readerDao) {
-        this.workshopDao = dao;
+    public WorkshopServiceImpl(WorkshopDao workshopDao, ReaderDao readerDao) {
+        this.workshopDao = workshopDao;
         this.readerDao = readerDao;
     }
 
@@ -65,7 +65,7 @@ public class WorkshopServiceImpl implements WorkshopService {
     @CacheEvict(value = "workshops", allEntries = true)
     public void removeWorkshop(Long id) throws NotFoundException {
         log.info("removing workshop {} ", id);
-        if(!workshopDao.exists(id)) {
+        if (!workshopDao.exists(id)) {
             throw new NotFoundException("Workshop with id " + id);
         }
         removeWorkshopFromReaders(id);
@@ -84,11 +84,11 @@ public class WorkshopServiceImpl implements WorkshopService {
         log.info("validating workshop {} ", workshop);
         validateRequiredFields(workshop);
 
-        if(workshop.getId() != null && workshopDao.exists(workshop.getId())) {
+        if (workshop.getId() != null && workshopDao.exists(workshop.getId())) {
             log.info("duplicate workshop id {} ", workshop.getId());
             throw new DuplicateElementException("Workshop with id " + workshop.getId());
         }
-        if(workshop.getCode() != null && workshopDao.existsByCode(workshop.getCode())) {
+        if (workshop.getCode() != null && workshopDao.existsByCode(workshop.getCode())) {
             log.info("duplicate workshop code {} ", workshop.getCode());
             throw new DuplicateElementException("Workshop with code " + workshop.getCode());
         }
@@ -98,23 +98,23 @@ public class WorkshopServiceImpl implements WorkshopService {
         log.info("validating workshop {} ", workshop);
         validateRequiredFields(workshop);
 
-        if(workshop.getId() == null || !workshopDao.exists(workshop.getId())) {
+        if (workshop.getId() == null || !workshopDao.exists(workshop.getId())) {
             log.info("workshop with id {} not found", workshop.getId());
             throw new NotFoundException("Workshop with id " + workshop.getId());
         }
         Workshop workshopLookupById = workshopDao.findById(workshop.getId()).get();
-        if(!workshopLookupById.getCode().equalsIgnoreCase(workshop.getCode())) {
+        if (!workshopLookupById.getCode().equalsIgnoreCase(workshop.getCode())) {
             log.info("attempting to change workshop code {} ", workshopLookupById.getCode());
             throw new InvalidFieldValueException("Workshop code can not be modified");
         }
     }
 
     private void validateRequiredFields(Workshop workshop) throws RequiredFieldMissingException {
-        if(workshop.getCode() == null || workshop.getCode().trim().isEmpty()) {
+        if (workshop.getCode() == null || workshop.getCode().trim().isEmpty()) {
             log.info("workshop code missing");
             throw new RequiredFieldMissingException("Code");
         }
-        if(workshop.getName() == null || workshop.getName().trim().isEmpty()) {
+        if (workshop.getName() == null || workshop.getName().trim().isEmpty()) {
             log.info("workshop name missing");
             throw new RequiredFieldMissingException("Name");
         }

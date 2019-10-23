@@ -5,6 +5,7 @@ import com.compucar.dto.ReaderDto;
 import com.compucar.model.Reader;
 import com.compucar.service.ReaderService;
 import com.compucar.service.exceptions.DuplicateElementException;
+import com.compucar.service.exceptions.InvalidFieldValueException;
 import com.compucar.service.exceptions.NotFoundException;
 import com.compucar.service.exceptions.RequiredFieldMissingException;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,13 @@ public class ReaderController {
         return readerService.listReaders();
     }
 
+    @GetMapping(params = "delta")
+    @AspectExecution
+    public List<Reader> listReaders(@RequestParam Integer delta) throws InvalidFieldValueException {
+        log.info("list all readers with battery less than {}", delta);
+        return readerService.listReadersWithBatteryLessThan(delta);
+    }
+
     @GetMapping(value = "/{readerId}")
     @AspectExecution
     public Reader getReader(@PathVariable("readerId") Long id) throws NotFoundException {
@@ -54,8 +62,9 @@ public class ReaderController {
 
     @PutMapping
     @AspectExecution
-    public void updateReader(@RequestBody Reader reader) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException {//throws NotFoundException, RequiredFieldMissingException, DuplicateElementException {
-        log.info("received  {}", reader);
+    public void updateReader(@RequestBody ReaderDto readerDto) throws RequiredFieldMissingException, NotFoundException, InvalidFieldValueException {
+        log.info("received {}", readerDto);
+        Reader reader = modelMapper.map(readerDto, Reader.class);
         readerService.updateReader(reader);
     }
 

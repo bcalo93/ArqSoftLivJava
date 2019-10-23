@@ -7,19 +7,20 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
+    <h1>Compucar</h1>
     <div>
         <h2>Mechanics</h2>
         <table border="1">
             <tr>
-            <th>Id</th>
-            <th>Number</th>
-            <th>Name</th>
-            <th>Phone</th>
-            <th>Start Date</th>
+                <th>Id</th>
+                <th>Number</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Start Date</th>
             </tr>
                 <c:forEach var="mechanic" items="${mechanics}">
                 <tr>
-                    <td>${mechanic.id}
+                    <td>${mechanic.id}</td>
                     <td>${mechanic.number}</td>
                     <td>${mechanic.name}</td>
                     <td>${mechanic.phone}</td>
@@ -27,5 +28,8 @@
                 </tr>
             </c:forEach>
         </table>
+    </div>
+    <div>
+        <a href="/app/page/main">Back to main</a>
     </div>
 </html>
