@@ -27,7 +27,7 @@ public class ReaderController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping()
+    @GetMapping
     @AspectExecution
     public List<Reader> listReaders() {
         log.info("list all readers");
@@ -62,8 +62,9 @@ public class ReaderController {
 
     @PutMapping
     @AspectExecution
-    public void updateReader(@RequestBody Reader reader) throws RequiredFieldMissingException, NotFoundException, InvalidFieldValueException {
-        log.info("received  {}", reader);
+    public void updateReader(@RequestBody ReaderDto readerDto) throws RequiredFieldMissingException, NotFoundException, InvalidFieldValueException {
+        log.info("received {}", readerDto);
+        Reader reader = modelMapper.map(readerDto, Reader.class);
         readerService.updateReader(reader);
     }
 
