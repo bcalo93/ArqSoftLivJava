@@ -106,8 +106,8 @@ public class CarServiceServiceImpl implements CarServiceService {
     private void checkForDiscount(CarService service) {
         LocalDateTime serviceDate = service.getDate();
         LocalDateTime previousMonthDate = serviceDate.minus(Period.ofMonths(1));
-        LocalDateTime from = LocalDateTime.of(previousMonthDate.getYear(), previousMonthDate.getMonth(), 1, 0, 0);
-        LocalDateTime to = LocalDateTime.of(previousMonthDate.getYear(), previousMonthDate.getMonth(), 30, 23, 59);
+        LocalDateTime from = LocalDateTime.of(previousMonthDate.getYear(), previousMonthDate.getMonth(), previousMonthDate.getDayOfMonth(), 0, 0);
+        LocalDateTime to = LocalDateTime.of(serviceDate.getYear(), serviceDate.getMonth(), serviceDate.getDayOfMonth(), 23, 59);
         if (service.getClient().isACompany() && carServiceDao.countByClientAndDateBetween(service.getClient(), from, to) > 5) {
             log.info("client is a company and has more than 5 services last month, applying {} percent discount", DISCOUNT_PERCENTAGE);
             service.applyDiscount(DISCOUNT_PERCENTAGE);
