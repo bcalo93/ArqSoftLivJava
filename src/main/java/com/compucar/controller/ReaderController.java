@@ -27,11 +27,18 @@ public class ReaderController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping
+    @GetMapping()
     @AspectExecution
     public List<Reader> listReaders() {
         log.info("list all readers");
         return readerService.listReaders();
+    }
+
+    @GetMapping(params = "delta")
+    @AspectExecution
+    public List<Reader> listReaders(@RequestParam Integer delta) throws InvalidFieldValueException {
+        log.info("list all readers with battery less than {}", delta);
+        return readerService.listReadersWithBatteryLessThan(delta);
     }
 
     @GetMapping(value = "/{readerId}")

@@ -40,6 +40,17 @@ public class ReaderServiceImpl implements ReaderService {
 
     @Override
     @Cacheable(value = "readers")
+    public List<Reader> listReadersWithBatteryLessThan(Integer delta) throws InvalidFieldValueException {
+        log.info("listing readers with battery less than {}", delta);
+        if(delta < 0) {
+            log.info("Negative delta param");
+            throw new InvalidFieldValueException("Delta should be positive");
+        }
+        return readerDao.findByAvailableBatteryLessThan(delta);
+    }
+
+    @Override
+    @Cacheable(value = "readers")
     public Reader getReader(Long id) throws NotFoundException {
         log.info("getting reader: {}", id);
         return readerDao.findById(id).orElseThrow(() -> new NotFoundException("Reader with id " + id));

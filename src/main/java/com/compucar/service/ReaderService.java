@@ -11,6 +11,8 @@ import java.util.List;
 public interface ReaderService {
     List<Reader> listReaders();
 
+    List<Reader> listReadersWithBatteryLessThan(Integer delta) throws InvalidFieldValueException;
+
     Reader getReader(Long id) throws NotFoundException;
 
     Reader addReader(Reader reader) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException;
