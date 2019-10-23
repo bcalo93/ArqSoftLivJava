@@ -2,10 +2,13 @@ package com.compucar.service;
 
 import com.compucar.builder.ServiceExecutionBuilder;
 import com.compucar.dao.ServiceExecutionDao;
-import com.compucar.dto.ServiceAttributeDto;
+import com.compucar.dto.ServiceTimeAttributeDto;
 import com.compucar.dto.ServiceSummaryDto;
 import com.compucar.dto.ServiceReportDto;
+import com.compucar.dto.ServiceUsageAttributeDto;
 import com.compucar.model.ServiceExecution;
+import com.compucar.service.exceptions.RequiredFieldMissingException;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,17 +26,19 @@ public class ServiceExecutionServiceImpTest {
 
     private ServiceExecutionDao dao;
 
+    private LocalDate paramDate = LocalDate.of(2019,7,30);
+    private LocalDateTime expectedStartDate = LocalDateTime.of(2019, 7,
+            30, 0, 0, 0);
+    private LocalDateTime expectedEndDate = LocalDateTime.of(2019, 7,
+            30, 23, 59, 59);
+
     @Before
     public void init() {
         this.dao = mock(ServiceExecutionDao.class);
     }
 
     @Test
-    public void getUsageReportOkTest() {
-        LocalDate paramDate = LocalDate.of(2019,7,30);
-        LocalDateTime expectedStartDate = LocalDateTime.of(2019, 7, 30, 0, 0, 0);
-        LocalDateTime expectedEndDate = LocalDateTime.of(2019, 7, 30, 23, 59, 59);
-
+    public void getUsageReportOkTest() throws RequiredFieldMissingException {
         when(dao.findByRegisterDateBetween(expectedStartDate,expectedEndDate))
                 .thenReturn(createListServiceExecutions());
         ServiceExecutionService service = new ServiceExecutionServiceImp(dao);
@@ -57,42 +62,67 @@ public class ServiceExecutionServiceImpTest {
         Assert.assertEquals(300, serviceSummaryB.getAverage(), 0);
         Assert.assertEquals(3, serviceSummaryB.getCallCount());
 
-        ServiceAttributeDto fastestService = result.getFastestService();
+        Long fastestTime = 4L;
+        ServiceTimeAttributeDto fastestService = result.getFastestService();
         Assert.assertEquals(SERVICE_A, fastestService.getServiceName());
-        Assert.assertEquals(3, fastestService.getValue());
+        Assert.assertEquals(fastestTime, fastestService.getTimeValue());
 
-        ServiceAttributeDto slowestService = result.getSlowestService();
+        Long slowestTime = 500L;
+        ServiceTimeAttributeDto slowestService = result.getSlowestService();
         Assert.assertEquals(SERVICE_B, slowestService.getServiceName());
-        Assert.assertEquals(500, slowestService.getValue());
+        Assert.assertEquals(slowestTime, slowestService.getTimeValue());
 
-        ServiceAttributeDto mostUsedService = result.getMostUsedService();
+        ServiceUsageAttributeDto mostUsedService = result.getMostUsedService();
         Assert.assertEquals(SERVICE_B, mostUsedService.getServiceName());
-        Assert.assertEquals(3, mostUsedService.getValue());
+        Assert.assertEquals(3, mostUsedService.getUsageCount());
 
-        ServiceAttributeDto lessUsedService = result.getLessUsedService();
+        ServiceUsageAttributeDto lessUsedService = result.getLessUsedService();
         Assert.assertEquals(SERVICE_A, lessUsedService.getServiceName());
-        Assert.assertEquals(2, lessUsedService.getValue());
+        Assert.assertEquals(2, lessUsedService.getUsageCount());
+
+        verify(dao, times(1)).findByRegisterDateBetween(expectedStartDate, expectedEndDate);
+    }
+
+    @Test
+    public void getUsageReportEmptyListTest() throws RequiredFieldMissingException {
+        when(dao.findByRegisterDateBetween(expectedStartDate,expectedEndDate))
+                .thenReturn(new ArrayList<>());
+        ServiceExecutionService service = new ServiceExecutionServiceImp(dao);
+        ServiceReportDto result = service.getUsageReport(paramDate);
+        Assert.assertTrue(result.getServiceSummary().isEmpty());
+        Assert.assertNull(result.getFastestService());
+        Assert.assertNull(result.getSlowestService());
+        Assert.assertNull(result.getMostUsedService());
+        Assert.assertNull(result.getLessUsedService());
+
+        verify(dao, times(1)).findByRegisterDateBetween(expectedStartDate, expectedEndDate);
+    }
+
+    @Test(expected = RequiredFieldMissingException.class)
+    public void getUsageReportNullDateTest() throws RequiredFieldMissingException {
+        ServiceExecutionService service = new ServiceExecutionServiceImp(dao);
+        service.getUsageReport(null);
     }
 
     private List<ServiceExecution> createListServiceExecutions() {
         List<ServiceExecution> result = new ArrayList<>();
         result.add(new ServiceExecutionBuilder()
-                .serviceName("ServiceA")
+                .serviceName(SERVICE_A)
                 .executionTime(5L)
                 .build());
 
         result.add(new ServiceExecutionBuilder()
-                .serviceName("ServiceA")
-                .executionTime(3L)
+                .serviceName(SERVICE_A)
+                .executionTime(4L)
                 .build());
 
         result.add(new ServiceExecutionBuilder()
-                .serviceName("ServiceB")
+                .serviceName(SERVICE_B)
                 .executionTime(300L)
                 .build());
 
         result.add(new ServiceExecutionBuilder()
-                .serviceName("ServiceB")
+                .serviceName(SERVICE_B)
                 .executionTime(100L)
                 .build());
 
@@ -102,5 +132,10 @@ public class ServiceExecutionServiceImpTest {
                 .build());
 
         return result;
+    }
+
+    @After
+    public void afterTest() {
+        verifyNoMoreInteractions(dao);
     }
 }

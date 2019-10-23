@@ -1,8 +1,11 @@
 package com.compucar.service;
 
+import com.compucar.builder.ServiceReportDtoBuilder;
 import com.compucar.dao.ServiceExecutionDao;
-import com.compucar.dto.ServiceAttributeDto;
+import com.compucar.dto.ServiceSummaryDto;
+import com.compucar.dto.ServiceTimeAttributeDto;
 import com.compucar.dto.ServiceReportDto;
+import com.compucar.dto.ServiceUsageAttributeDto;
 import com.compucar.model.ServiceExecution;
 import com.compucar.service.exceptions.RequiredFieldMissingException;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,8 +45,16 @@ public class ServiceExecutionServiceImp implements ServiceExecutionService {
     }
 
     @Override
-    public ServiceReportDto getUsageReport(LocalDate date) {
-        return null;
+    public ServiceReportDto getUsageReport(LocalDate date) throws RequiredFieldMissingException {
+        List<ServiceExecution> serviceExecutions = this.getServiceExecutionByDate(date);
+        Map<String, List<ServiceExecution>> groupedServiceExecution = groupServiceExecutionByName(serviceExecutions);
+        return new ServiceReportDtoBuilder()
+                .serviceSummary(getSummaryPerService(groupedServiceExecution))
+                .fastestService(getFastestService(serviceExecutions))
+                .slowestService(getSlowestService(serviceExecutions))
+                .mostUsedService(getMostUsedService(groupedServiceExecution))
+                .lessUsedService(getLessUsedService(groupedServiceExecution))
+                .build();
     }
 
     private boolean isValidServiceExecution(ServiceExecution serviceExecution) {
@@ -59,10 +71,45 @@ public class ServiceExecutionServiceImp implements ServiceExecutionService {
         return serviceExecutionDao.findByRegisterDateBetween(startTime, endTime);
     }
 
-    private List<ServiceAttributeDto> getAveragePerService(List<ServiceExecution> serviceExecutions) {
-        Map<String, List<ServiceExecution>> testMap = serviceExecutions.stream().collect(Collectors.groupingBy(serviceExecution ->
-                serviceExecution.getServiceName()));
-//        return serviceExecutions.stream().collect(Collectors.groupingBy())
-        return null;
+    private Map<String, List<ServiceExecution>> groupServiceExecutionByName(List<ServiceExecution> serviceExecutions) {
+        return serviceExecutions.stream().collect(Collectors.groupingBy(se -> se.getServiceName()));
+    }
+
+    private List<ServiceSummaryDto> getSummaryPerService(Map<String, List<ServiceExecution>> groupedServiceExecution) {
+        return groupedServiceExecution.keySet().stream()
+                .map(gs -> new ServiceSummaryDto(gs,
+                        groupedServiceExecution.get(gs).stream()
+                        .collect(Collectors.averagingDouble(se -> se.getExecutionTime())),
+                        groupedServiceExecution.get(gs).size()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    private ServiceTimeAttributeDto getFastestService(List<ServiceExecution> serviceExecutions) {
+        return serviceExecutions.stream()
+                .min(Comparator.comparing(se -> se.getExecutionTime()))
+                .map(se -> new ServiceTimeAttributeDto(se))
+                .orElse(null);
+    }
+
+    private ServiceTimeAttributeDto getSlowestService(List<ServiceExecution> serviceExecutions) {
+        return serviceExecutions.stream()
+                .max(Comparator.comparing(se -> se.getExecutionTime()))
+                .map(se -> new ServiceTimeAttributeDto(se))
+                .orElse(null);
+    }
+
+    private ServiceUsageAttributeDto getMostUsedService(Map<String, List<ServiceExecution>> groupedServiceExecution) {
+        return groupedServiceExecution.keySet().stream()
+                .max(Comparator.comparing(key -> groupedServiceExecution.get(key).size()))
+                .map(key -> new ServiceUsageAttributeDto(key, groupedServiceExecution.get(key).size()))
+                .orElse(null);
+    }
+
+    private ServiceUsageAttributeDto getLessUsedService(Map<String, List<ServiceExecution>> groupedServiceExecution) {
+        return groupedServiceExecution.keySet().stream()
+                .min(Comparator.comparing(key -> groupedServiceExecution.get(key).size()))
+                .map(key -> new ServiceUsageAttributeDto(key, groupedServiceExecution.get(key).size()))
+                .orElse(null);
     }
 }
