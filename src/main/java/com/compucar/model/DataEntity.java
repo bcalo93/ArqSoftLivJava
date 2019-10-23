@@ -23,7 +23,7 @@ public abstract class DataEntity {
             return false;
         }
         DataEntity entity = (DataEntity) obj;
-        return this.id == entity.id;
+        return this.id.equals(entity.id);
     }
 
     @Override
