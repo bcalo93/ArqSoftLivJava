@@ -663,8 +663,10 @@ public class CarServiceImplTest {
         Reader carServiceReader = new Reader();
         Workshop otherWorkshop = new Workshop();
 
+        otherWorkshop.setId(111L);
         otherWorkshop.setCode("RR55");
         carServiceClient.setNumber(1122);
+        carServiceWorkshop.setId(999L);
         carServiceWorkshop.setCode("WP90");
         carServiceMechanic.setNumber(2233);
         carServiceReader.setCode("RDR54");
