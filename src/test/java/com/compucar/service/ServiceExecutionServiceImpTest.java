@@ -38,6 +38,32 @@ public class ServiceExecutionServiceImpTest {
     }
 
     @Test
+    public void addServiceExecutionOkTest() {
+        when(dao.save(isA(ServiceExecution.class))).thenReturn(isA(ServiceExecution.class));
+        ServiceExecutionService service = new ServiceExecutionServiceImp(dao);
+
+        ServiceExecution toAdd = new ServiceExecutionBuilder()
+                .executionTime(200L)
+                .registerDate(LocalDateTime.of(2019, 3,20,19,0))
+                .serviceName(SERVICE_A)
+                .build();
+
+        service.addServiceExecution(toAdd);
+
+        verify(dao, times(1)).save(toAdd);
+    }
+
+    @Test
+    public void addServiceExecutionRequiredFieldMissingTest() {
+        ServiceExecutionService service = new ServiceExecutionServiceImp(dao);
+        service.addServiceExecution(new ServiceExecutionBuilder()
+                .executionTime(200L)
+                .registerDate(LocalDateTime.of(2019, 3,20,19,0))
+                .build()
+        );
+    }
+
+    @Test
     public void getUsageReportOkTest() throws RequiredFieldMissingException {
         when(dao.findByRegisterDateBetween(expectedStartDate,expectedEndDate))
                 .thenReturn(createListServiceExecutions());

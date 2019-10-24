@@ -11,6 +11,11 @@ public class ServiceExecutionBuilder {
         this.serviceExecution = new ServiceExecution();
     }
 
+    public ServiceExecutionBuilder id(Long id) {
+        this.serviceExecution.setId(id);
+        return this;
+    }
+
     public ServiceExecutionBuilder serviceName(String serviceName) {
         this.serviceExecution.setServiceName(serviceName);
         return this;

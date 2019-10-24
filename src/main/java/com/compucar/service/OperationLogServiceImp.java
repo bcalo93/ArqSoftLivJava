@@ -15,6 +15,10 @@ public class OperationLogServiceImp implements OperationLogService {
     @Autowired
     private OperationLogDao operationLogDao;
 
+    public OperationLogServiceImp(OperationLogDao operationLogDao) {
+        this.operationLogDao = operationLogDao;
+    }
+
     @Override
     public void addOperationLog(OperationLog operationLog) {
         if (isValidOperationLog(operationLog)) {

@@ -11,6 +11,11 @@ public class OperationLogBuilder {
         this.operationLog = new OperationLog();
     }
 
+    public OperationLogBuilder id(Long id) {
+        this.operationLog.setId(id);
+        return this;
+    }
+
     public OperationLogBuilder username(String username) {
         this.operationLog.setUsername(username);
         return this;
