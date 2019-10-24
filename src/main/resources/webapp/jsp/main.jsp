@@ -17,6 +17,7 @@
             <li><a href="/app/page/readers">Readers</a></li>
             <li><a href="/app/page/services">Services</a></li>
             <li><a href="/app/page/logs">Operation logs</a></li>
+            <li><a href="/app/page/usagereport">Usage reports</a></li>
         </ul>
     </div>
 </html>

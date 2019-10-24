@@ -6,11 +6,16 @@ import com.compucar.dto.OperationLogDto;
 import com.compucar.model.Mechanic;
 import com.compucar.model.OperationLog;
 import com.compucar.service.*;
+import com.compucar.service.exceptions.RequiredFieldMissingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDate;
 
 @Controller
 @RequestMapping("/page")
@@ -35,6 +40,9 @@ public class PageController {
 
     @Autowired
     private OperationLogService operationLogService;
+
+    @Autowired
+    private ServiceExecutionService executionService;
 
     @Autowired
     private EntityDtoConverter<OperationLog, OperationLogDto> operationLogDtoConverter;
@@ -80,5 +88,15 @@ public class PageController {
                 .getAllOperationLogs())
         );
         return "operationlog/list";
+    }
+
+    @GetMapping(value = "/usagereport")
+    public String getUsageReport(@RequestParam(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                             LocalDate date, Model model) throws RequiredFieldMissingException {
+        if(date == null) {
+            date = LocalDate.now();
+        }
+        model.addAttribute("usageReport", executionService.getUsageReport(date));
+        return "report/usagereport";
     }
 }
