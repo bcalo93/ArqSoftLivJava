@@ -17,6 +17,10 @@ public class BeanCreationServiceImpl implements BeanCreationService, BeanPostPro
     @Autowired
     private BeanCreationDao beanCreationDao;
 
+    public BeanCreationServiceImpl(BeanCreationDao beanCreationDao) {
+        this.beanCreationDao = beanCreationDao;
+    }
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         BeanCreation beanCreation = new BeanCreation();
