@@ -10,8 +10,6 @@ import com.compucar.service.exceptions.NotFoundException;
 import com.compucar.service.exceptions.RequiredFieldMissingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,21 +30,18 @@ public class WorkshopServiceImpl implements WorkshopService {
     }
 
     @Override
-    @Cacheable(value = "workshops")
     public List<Workshop> listWorkshops() {
         log.info("listing workshops ");
         return workshopDao.findAll();
     }
 
     @Override
-    @Cacheable(value = "workshops")
     public Workshop getWorkshop(Long id) throws NotFoundException {
         log.info("getting workshop: {}", id);
         return workshopDao.findById(id).orElseThrow(() -> new NotFoundException("Workshop with id " + id));
     }
 
     @Override
-    @CacheEvict(value = "workshops", allEntries = true)
     public Workshop addWorkshop(Workshop workshop) throws DuplicateElementException, RequiredFieldMissingException {
         log.info("adding workshop {} ", workshop);
         validateWorkshopAdd(workshop);
@@ -54,7 +49,6 @@ public class WorkshopServiceImpl implements WorkshopService {
     }
 
     @Override
-    @CacheEvict(value = "workshops", allEntries = true)
     public Workshop updateWorkshop(Workshop workshop) throws NotFoundException, RequiredFieldMissingException, InvalidFieldValueException {
         log.info("updating workshop {} ", workshop);
         validateWorkshopUpdate(workshop);
@@ -62,7 +56,6 @@ public class WorkshopServiceImpl implements WorkshopService {
     }
 
     @Override
-    @CacheEvict(value = "workshops", allEntries = true)
     public void removeWorkshop(Long id) throws NotFoundException {
         log.info("removing workshop {} ", id);
         if (!workshopDao.exists(id)) {

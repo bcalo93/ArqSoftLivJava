@@ -32,7 +32,7 @@ public class MechanicController {
     @GetMapping(value = "/{mechanicId}")
     @ResponseStatus(value = HttpStatus.OK)
     @AspectExecution
-    public MechanicDto get(@PathVariable("mechanicId") Long mechanicId) throws IdNullException, NotFoundException {
+    public MechanicDto getMechanic(@PathVariable("mechanicId") Long mechanicId) throws IdNullException, NotFoundException {
         Mechanic mechanic = this.mechanicService.getMechanic(mechanicId);
         return entityDtoConverter.convertToDto(mechanic);
     }

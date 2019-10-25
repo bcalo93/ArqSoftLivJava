@@ -27,7 +27,7 @@ public class ClientController {
     @GetMapping(value = "/{clientId}")
     @ResponseStatus(value = HttpStatus.OK)
     @AspectExecution
-    public Client get(@PathVariable("clientId") Long clientId) throws IdNullException, NotFoundException {
+    public Client getClient(@PathVariable("clientId") Long clientId) throws IdNullException, NotFoundException {
         return this.clientService.getClient(clientId);
     }
 

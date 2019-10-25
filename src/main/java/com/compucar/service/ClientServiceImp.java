@@ -4,8 +4,6 @@ import com.compucar.dao.ClientDao;
 import com.compucar.model.Client;
 import com.compucar.service.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,7 +19,6 @@ public class ClientServiceImp implements ClientService {
     }
 
     @Override
-    @CacheEvict(value = "clients", allEntries = true)
     public Client addClient(Client client) throws EntityNullException, DuplicateElementException, RequiredFieldMissingException {
         if (client == null) {
             throw new EntityNullException("The client is null.");
@@ -36,7 +33,6 @@ public class ClientServiceImp implements ClientService {
     }
 
     @Override
-    @CacheEvict(value = "clients", allEntries = true)
     public Client updateClient(Long clientId, Client client) throws IdNullException, EntityNullException,
             NotFoundException {
         if (clientId == null) {
@@ -56,7 +52,6 @@ public class ClientServiceImp implements ClientService {
     }
 
     @Override
-    @CacheEvict(value = "clients", allEntries = true)
     public void deleteClient(Long clientId) throws IdNullException {
         if (clientId == null) {
             throw new IdNullException("The client id is null.");
@@ -69,7 +64,6 @@ public class ClientServiceImp implements ClientService {
     }
 
     @Override
-    @Cacheable(value = "clients")
     public Client getClient(Long clientId) throws IdNullException, NotFoundException {
         if (clientId == null) {
             throw new IdNullException("The client id is null.");
@@ -82,7 +76,6 @@ public class ClientServiceImp implements ClientService {
     }
 
     @Override
-    @Cacheable(value = "clients")
     public List<Client> getAllClients() {
         return this.clientDao.findAll();
     }
