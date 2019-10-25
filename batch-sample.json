@@ -70,6 +70,7 @@
             "serviceTime": 45,
             "cost": 1500.0,
             "clientCode": 20021,
+            "mechanicCode" : 1001,
             "readerCode": "RED057",
             "workshopCode": "WKSP001"
         },
@@ -79,6 +80,7 @@
             "serviceTime": 65,
             "cost": 2500.0,
             "clientCode": 3023,
+            "mechanicCode" : 1020,
             "readerCode": "RED150",
             "workshopCode": "WKSP015"
         }

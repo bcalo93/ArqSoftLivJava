@@ -129,3 +129,12 @@ buildNumber.properties
 .flattened-pom.xml
 
 # End of https://www.gitignore.io/api/java,maven,intellij
+
+# Visual Studio Code
+.project
+.factorypath
+.classpath
+.vscode
+.settings
+
+.DS_Store

@@ -1,9 +1,10 @@
 package com.compucar;
 
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.webapp.WebAppContext;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -37,12 +38,22 @@ public class WebServer {
     }
 
     private ServletContextHandler buildJettyContext() throws Exception {
-        ServletContextHandler jettyContext = new ServletContextHandler();
-        jettyContext.setContextPath(contextPath);
+        WebAppContext jettyWebContext = new WebAppContext();
+        // seteo del context path / path url escucha
+        jettyWebContext.setContextPath(contextPath);
 
-        this.configSpring(jettyContext);
+        // configuracion de tiempo de session
+        jettyWebContext.getSessionHandler().getSessionManager().setMaxInactiveInterval(30 * 60); //Es en segundos
 
-        return jettyContext;
+        // config spring web application context
+        this.configSpring(jettyWebContext);
+
+        // config web resources para jsps/html
+        ClassPathResource classPathResource = new ClassPathResource("/webapp");
+        String resourceBasePath = classPathResource.getURI().toString();
+        jettyWebContext.setResourceBase(resourceBasePath);
+
+        return jettyWebContext;
     }
 
     private void configSpring(ServletContextHandler jettyContext) {

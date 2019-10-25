@@ -1,9 +1,27 @@
 package com.compucar.model;
 
 import lombok.Data;
-import java.util.Calendar;
+import lombok.EqualsAndHashCode;
 
+import javax.persistence.Entity;
+import java.time.LocalDateTime;
+
+@EqualsAndHashCode(callSuper = true)
 @Data
+@Entity
 public class Mechanic extends Contact {
-    private Calendar startDate;
+    private LocalDateTime startDate;
+
+    public Mechanic() {
+    }
+
+    public Mechanic(Integer number) {
+        this.setNumber(number);
+    }
+
+    public void update(Mechanic mechanic) {
+        this.setName(mechanic.getName());
+        this.setStartDate(mechanic.getStartDate());
+        this.setPhone(mechanic.getPhone());
+    }
 }
