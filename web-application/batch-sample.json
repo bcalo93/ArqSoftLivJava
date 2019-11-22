@@ -72,7 +72,25 @@
             "clientCode": 20021,
             "mechanicCode" : 1001,
             "readerCode": "RED057",
-            "workshopCode": "WKSP001"
+            "workshopCode": "WKSP001",
+            "events" : [
+            	{
+            		"name" : "ENGINE_SENSOR",
+            		"payload" : "..."
+            	},
+            	{
+            		"name" : "O2_SENSOR",
+            		"payload" : "..."
+            	},
+            	{
+            		"name" : "FUEL_PRESSURE_SENSOR",
+            		"payload" : "..."
+            	},            	
+            	{
+            		"name" : "AIR_FLOW_SENSOR",
+            		"payload" : "..."
+            	}
+            ]
         },
         {
             "code": "SRV017",
@@ -82,7 +100,26 @@
             "clientCode": 3023,
             "mechanicCode" : 1020,
             "readerCode": "RED150",
-            "workshopCode": "WKSP015"
+            "workshopCode": "WKSP015",
+            "events" : [
+            	{
+            		"name" : "CRANKSHAFT_SENSOR",
+            		"payload" : "..."
+            	},
+            	{
+            		"name" : "O2_SENSOR",
+            		"payload" : "..."
+            	},
+            	{
+            		"name" : "VOLTAGE_SENSOR",
+            		"payload" : "..."
+            	},            	
+            	{
+            		"name" : "NOX_SENSOR",
+            		"payload" : "..."
+            	}
+            ]
+
         }
     ]
 }

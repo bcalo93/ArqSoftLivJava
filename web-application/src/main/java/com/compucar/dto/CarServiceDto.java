@@ -3,6 +3,7 @@ package com.compucar.dto;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class CarServiceDto {
@@ -15,4 +16,5 @@ public class CarServiceDto {
     private Integer mechanicCode;
     private String readerCode;
     private String workshopCode;
+    private List<EventDto> events;
 }

@@ -9,7 +9,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 public class WebServer {
 
-    private int port = 8080;
+    private int port = 8081;
     private String contextPath = "/";
     private Class<?> springApplicationContextClass;
 

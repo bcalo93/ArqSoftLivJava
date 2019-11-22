@@ -2,8 +2,10 @@ package com.compucar.controller;
 
 import com.compucar.aop.AspectExecution;
 import com.compucar.dto.CarServiceDto;
+import com.compucar.dto.EventDto;
 import com.compucar.model.*;
 import com.compucar.service.CarServiceService;
+import com.compucar.service.EventService;
 import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.InvalidFieldValueException;
 import com.compucar.service.exceptions.NotFoundException;
@@ -24,6 +26,9 @@ public class CarServiceController {
 
     @Autowired
     private CarServiceService carServiceService;
+
+    @Autowired
+    private EventService eventService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -54,7 +59,14 @@ public class CarServiceController {
             InvalidFieldValueException {
         log.info("received  {}", serviceDto);
         CarService service = convertToEntity(serviceDto);
-        return carServiceService.addService(service);
+        CarService serviceAdded = carServiceService.addService(service);
+        List<EventDto> serviceEvents = serviceDto.getEvents();
+        for (EventDto event : serviceEvents) {
+            event.setServiceCode(service.getCode());
+            eventService.postEvent(event);
+        }
+
+        return serviceAdded;
     }
 
     private CarService convertToEntity(CarServiceDto serviceDto) {
