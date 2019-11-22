@@ -160,7 +160,7 @@ public class CarServiceServiceImpl implements CarServiceService {
     }
 
     private void validateFieldValues(CarService service) throws InvalidFieldValueException {
-        int minBatteryLife = Integer.valueOf(env.getProperty("minBatteryLife"));
+        int minBatteryLife = Integer.valueOf(env.getProperty("reader.minBatteryLife"));
         LocalDateTime serviceDate = service.getDate();
         Reader serviceReader = service.getReader();
         Workshop serviceWorkshop = service.getWorkshop();

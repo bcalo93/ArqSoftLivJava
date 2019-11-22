@@ -29,7 +29,6 @@ public class Reader extends MaintenanceItem {
     }
 
     public boolean isAvailable(int serviceTime, int minBatteryLifeRequired) {
-
         return (actualTimeUse + serviceTime) <= batteryLife && (batteryLife - actualTimeUse) >= Integer.valueOf(minBatteryLifeRequired);
     }
 

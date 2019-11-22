@@ -3,6 +3,7 @@ package com.compucar.service;
 import com.compucar.dto.EventDto;
 import com.compucar.service.exceptions.InvalidFieldValueException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +19,11 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Value("${service.repository.url}")
+    private String url;
+
     @Override
     public void postEvent(EventDto serviceEvent) throws InvalidFieldValueException {
-        String url = "http://localhost:8081/repository/events";
-
         HttpEntity<EventDto> requestEntity = new HttpEntity<>(serviceEvent);
         try {
             ResponseEntity<Void> responseEntity = restTemplate.postForEntity(url, requestEntity, Void.class);
