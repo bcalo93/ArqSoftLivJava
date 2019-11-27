@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface CarServiceDao extends JpaRepository<CarService, Long> {
     Optional<CarService> findById(Long id);
 
+    Optional<CarService> findByCode(String code);
+
     boolean existsByCode(String code);
 
     boolean existsByClientAndDateBetween(Client client, LocalDateTime from, LocalDateTime to);

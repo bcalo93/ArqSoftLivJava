@@ -61,12 +61,20 @@ public class CarServiceController {
         CarService service = convertToEntity(serviceDto);
         CarService serviceAdded = carServiceService.addService(service);
         List<EventDto> serviceEvents = serviceDto.getEvents();
-        for (EventDto event : serviceEvents) {
-            event.setServiceCode(service.getCode());
-            eventService.postEvent(event);
+        if(serviceEvents != null) {
+            for (EventDto event : serviceEvents) {
+                event.setServiceCode(service.getCode());
+                eventService.postEvent(event);
+            }
         }
 
         return serviceAdded;
+    }
+
+    @PostMapping(path = "/{serviceCode}/diagnoses")
+    public CarService addDiagnoseToService(@PathVariable("serviceCode") String serviceCode, @RequestBody Diagnose diagnose)
+            throws NotFoundException, RequiredFieldMissingException {
+        return carServiceService.addDiagnose(serviceCode, diagnose);
     }
 
     private CarService convertToEntity(CarServiceDto serviceDto) {

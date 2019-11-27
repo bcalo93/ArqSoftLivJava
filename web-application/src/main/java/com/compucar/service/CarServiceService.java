@@ -1,6 +1,7 @@
 package com.compucar.service;
 
 import com.compucar.model.CarService;
+import com.compucar.model.Diagnose;
 import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.InvalidFieldValueException;
 import com.compucar.service.exceptions.NotFoundException;
@@ -14,4 +15,6 @@ public interface CarServiceService {
     CarService getService(Long id) throws NotFoundException;
 
     CarService addService(CarService service) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException, InvalidFieldValueException;
+
+    CarService addDiagnose(String serviceCode, Diagnose diagnose) throws NotFoundException, RequiredFieldMissingException;
 }

@@ -203,4 +203,22 @@ public class CarServiceServiceImpl implements CarServiceService {
             throw new InvalidFieldValueException("Client is a person and already did a service on this date");
         }
     }
+
+    public CarService addDiagnose(String serviceCode, Diagnose diagnose) throws NotFoundException, RequiredFieldMissingException {
+        CarService service = carServiceDao.findByCode(serviceCode).orElseThrow(() -> new NotFoundException("Service with code " + serviceCode));
+        validateDiagnose(diagnose);
+        service.addDiagnose(diagnose);
+        return this.carServiceDao.save(service);
+    }
+
+    private void validateDiagnose(Diagnose diagnose) throws RequiredFieldMissingException {
+        if(diagnose.getResult() == null || diagnose.getResult().trim().isEmpty()) {
+            log.info("Diagnose result missing");
+            throw new RequiredFieldMissingException("Diagnose result");
+        }
+        if(diagnose.getEventName() == null || diagnose.getEventName().trim().isEmpty()) {
+            log.info("Event name missing");
+            throw new RequiredFieldMissingException("Event name");
+        }
+    }
 }
