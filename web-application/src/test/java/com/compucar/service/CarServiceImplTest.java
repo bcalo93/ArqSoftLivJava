@@ -117,7 +117,7 @@ public class CarServiceImplTest {
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(carServiceDao.save(isA(CarService.class))).thenReturn(newCarService);
-        when(env.getProperty("minBatteryLife")).thenReturn("20");
+        when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
         CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
 
         CarService result = service.addService(newCarService);
@@ -130,7 +130,7 @@ public class CarServiceImplTest {
         verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
         verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
         verify(carServiceDao, times(1)).save(newCarService);
-        verify(env, times(1)).getProperty("minBatteryLife");
+        verify(env, times(1)).getProperty("reader.minBatteryLife");
     }
 
     @Test(expected = NotFoundException.class)
@@ -481,7 +481,7 @@ public class CarServiceImplTest {
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
-        when(env.getProperty("minBatteryLife")).thenReturn("20");
+        when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
         CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
 
         try {
@@ -491,7 +491,7 @@ public class CarServiceImplTest {
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
             verify(readerDao, times(1)).findByCode(carServiceReader.getCode());
-            verify(env, times(1)).getProperty("minBatteryLife");
+            verify(env, times(1)).getProperty("reader.minBatteryLife");
         }
     }
 
@@ -519,7 +519,7 @@ public class CarServiceImplTest {
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
-        when(env.getProperty("minBatteryLife")).thenReturn("20");
+        when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
         CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
 
         try {
@@ -529,7 +529,7 @@ public class CarServiceImplTest {
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
             verify(readerDao, times(1)).findByCode(carServiceReader.getCode());
-            verify(env, times(1)).getProperty("minBatteryLife");
+            verify(env, times(1)).getProperty("reader.minBatteryLife");
         }
     }
 
@@ -558,7 +558,7 @@ public class CarServiceImplTest {
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
-        when(env.getProperty("minBatteryLife")).thenReturn("20");
+        when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
         CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
 
         try {
@@ -568,7 +568,7 @@ public class CarServiceImplTest {
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
             verify(readerDao, times(1)).findByCode(carServiceReader.getCode());
-            verify(env, times(1)).getProperty("minBatteryLife");
+            verify(env, times(1)).getProperty("reader.minBatteryLife");
         }
     }
 
@@ -599,7 +599,7 @@ public class CarServiceImplTest {
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
-        when(env.getProperty("minBatteryLife")).thenReturn("20");
+        when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
         CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
 
         try {
@@ -609,7 +609,7 @@ public class CarServiceImplTest {
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
             verify(readerDao, times(1)).findByCode(carServiceReader.getCode());
-            verify(env, times(1)).getProperty("minBatteryLife");
+            verify(env, times(1)).getProperty("reader.minBatteryLife");
         }
     }
 
@@ -640,7 +640,7 @@ public class CarServiceImplTest {
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
-        when(env.getProperty("minBatteryLife")).thenReturn("20");
+        when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
         CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
 
         try {
@@ -650,7 +650,7 @@ public class CarServiceImplTest {
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
             verify(readerDao, times(1)).findByCode(carServiceReader.getCode());
-            verify(env, times(1)).getProperty("minBatteryLife");
+            verify(env, times(1)).getProperty("reader.minBatteryLife");
         }
     }
 
@@ -686,7 +686,7 @@ public class CarServiceImplTest {
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
-        when(env.getProperty("minBatteryLife")).thenReturn("20");
+        when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
         CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
 
         try {
@@ -696,7 +696,7 @@ public class CarServiceImplTest {
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
             verify(readerDao, times(1)).findByCode(carServiceReader.getCode());
-            verify(env, times(1)).getProperty("minBatteryLife");
+            verify(env, times(1)).getProperty("reader.minBatteryLife");
         }
     }
 
@@ -728,7 +728,7 @@ public class CarServiceImplTest {
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
-        when(env.getProperty("minBatteryLife")).thenReturn("20");
+        when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
         when(carServiceDao.countByMechanicAndDateBetween(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class))).thenReturn(6);
         CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
 
@@ -739,7 +739,7 @@ public class CarServiceImplTest {
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
             verify(readerDao, times(1)).findByCode(carServiceReader.getCode());
-            verify(env, times(1)).getProperty("minBatteryLife");
+            verify(env, times(1)).getProperty("reader.minBatteryLife");
             verify(carServiceDao, times(1)).countByMechanicAndDateBetween(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class));
         }
     }
@@ -772,7 +772,7 @@ public class CarServiceImplTest {
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
-        when(env.getProperty("minBatteryLife")).thenReturn("20");
+        when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
         when(carServiceDao.countByMechanicAndDateBetween(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class))).thenReturn(0);
         when(carServiceDao.existsByMechanicAndDateBetweenAndWorkshopNot(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class), isA(Workshop.class))).thenReturn(true);
         CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
@@ -784,7 +784,7 @@ public class CarServiceImplTest {
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
             verify(readerDao, times(1)).findByCode(carServiceReader.getCode());
-            verify(env, times(1)).getProperty("minBatteryLife");
+            verify(env, times(1)).getProperty("reader.minBatteryLife");
             verify(carServiceDao, times(1)).countByMechanicAndDateBetween(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class));
             verify(carServiceDao, times(1)).existsByMechanicAndDateBetweenAndWorkshopNot(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class), isA(Workshop.class));
         }
@@ -819,7 +819,7 @@ public class CarServiceImplTest {
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
-        when(env.getProperty("minBatteryLife")).thenReturn("20");
+        when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
         when(carServiceDao.countByMechanicAndDateBetween(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class))).thenReturn(0);
         when(carServiceDao.existsByMechanicAndDateBetweenAndWorkshopNot(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class), isA(Workshop.class))).thenReturn(false);
         when(carServiceDao.existsByClientAndDateBetween(isA(Client.class), isA(LocalDateTime.class), isA(LocalDateTime.class))).thenReturn(true);
@@ -832,7 +832,7 @@ public class CarServiceImplTest {
             verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
             verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
             verify(readerDao, times(1)).findByCode(carServiceReader.getCode());
-            verify(env, times(1)).getProperty("minBatteryLife");
+            verify(env, times(1)).getProperty("reader.minBatteryLife");
             verify(carServiceDao, times(1)).countByMechanicAndDateBetween(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class));
             verify(carServiceDao, times(1)).existsByMechanicAndDateBetweenAndWorkshopNot(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class), isA(Workshop.class));
             verify(carServiceDao, times(1)).existsByClientAndDateBetween(isA(Client.class), isA(LocalDateTime.class), isA(LocalDateTime.class));
@@ -868,7 +868,7 @@ public class CarServiceImplTest {
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
-        when(env.getProperty("minBatteryLife")).thenReturn("20");
+        when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
         when(carServiceDao.countByMechanicAndDateBetween(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class))).thenReturn(0);
         when(carServiceDao.existsByMechanicAndDateBetweenAndWorkshopNot(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class), isA(Workshop.class))).thenReturn(false);
         when(carServiceDao.countByClientAndDateBetween(isA(Client.class), isA(LocalDateTime.class), isA(LocalDateTime.class))).thenReturn(6);
@@ -882,7 +882,7 @@ public class CarServiceImplTest {
         verify(workshopDao, times(1)).findByCode(carServiceWorkshop.getCode());
         verify(mechanicDao, times(1)).findByNumber(carServiceMechanic.getNumber());
         verify(readerDao, times(1)).findByCode(carServiceReader.getCode());
-        verify(env, times(1)).getProperty("minBatteryLife");
+        verify(env, times(1)).getProperty("reader.minBatteryLife");
         verify(carServiceDao, times(1)).countByMechanicAndDateBetween(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class));
         verify(carServiceDao, times(1)).existsByMechanicAndDateBetweenAndWorkshopNot(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class), isA(Workshop.class));
         verify(carServiceDao, times(1)).save(newCarService);

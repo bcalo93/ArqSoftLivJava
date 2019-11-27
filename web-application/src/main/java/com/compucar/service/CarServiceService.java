@@ -7,7 +7,7 @@ import com.compucar.service.exceptions.InvalidFieldValueException;
 import com.compucar.service.exceptions.NotFoundException;
 import com.compucar.service.exceptions.RequiredFieldMissingException;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface CarServiceService {
@@ -15,7 +15,9 @@ public interface CarServiceService {
 
     CarService getService(Long id) throws NotFoundException;
 
-    List<CarService> getServicesBetweenDates(LocalDateTime from, LocalDateTime to);
+    List<CarService> getServicesBetweenDates(LocalDate from, LocalDate to);
+
+    List<CarService> getServicesForGivenMonth(int month) throws InvalidFieldValueException;
 
     CarService addService(CarService service) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException, InvalidFieldValueException;
 
