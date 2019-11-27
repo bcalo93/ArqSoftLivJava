@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd">
+
+    <!-- crea un channel para el listener que va a consumir los mensajes -->
+    <int:channel id="notifications"/>
+
+    <!-- define un adapter que rutea a el processListenerChannel los mensajes
+	que llegan a la queue -->
+    <int-jms:inbound-channel-adapter channel="notifications"
+                                     destination-name="${queue.process.request}" message-converter="messageConverter"
+                                     receive-timeout="${queue.receive.timeout}" connection-factory="connectionFactory"/>
+
+    <!-- service que sera activado cuando un mensaje llegue a la queue -->
+    <int:service-activator id="processServiceActivator"
+                           input-channel="notifications"
+                           ref="messageHandler" method="processService"/>
+
+    <!-- pooler -->
+    <int:poller id="poller" default="true" fixed-delay="100"/>
+</beans>
+
+
