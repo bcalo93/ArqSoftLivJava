@@ -5,6 +5,8 @@ import com.compucar.model.Client;
 import com.compucar.model.Mechanic;
 import com.compucar.model.Workshop;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +19,9 @@ public interface CarServiceDao extends JpaRepository<CarService, Long> {
     Optional<CarService> findByCode(String code);
 
     List<CarService> findByDateBetween(LocalDateTime from, LocalDateTime to);
+
+    @Query("Select s from CarService s where MONTH(s.date) = :month")
+    List<CarService> findByMonth(@Param("month") int month);
 
     boolean existsByCode(String code);
 
