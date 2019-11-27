@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
@@ -61,6 +62,12 @@ public class CarServiceServiceImpl implements CarServiceService {
     public CarService getService(Long id) throws NotFoundException {
         log.info("getting service: {}", id);
         return carServiceDao.findById(id).orElseThrow(() -> new NotFoundException("Service with id " + id));
+    }
+
+    @Override
+    public List<CarService> getServicesBetweenDates(LocalDateTime from, LocalDateTime to) {
+        log.info("getting services between dates: {} and {}", from, to);
+        return carServiceDao.findByDateBetween(from, to);
     }
 
     @Override
@@ -201,6 +208,24 @@ public class CarServiceServiceImpl implements CarServiceService {
         if (serviceClient.isAPerson() && carServiceDao.existsByClientAndDateBetween(serviceClient, startOfDay, endOfDay)) {
             log.info("service client is a person and already did a service on this date");
             throw new InvalidFieldValueException("Client is a person and already did a service on this date");
+        }
+    }
+
+    public CarService addDiagnose(String serviceCode, Diagnose diagnose) throws NotFoundException, RequiredFieldMissingException {
+        CarService service = carServiceDao.findByCode(serviceCode).orElseThrow(() -> new NotFoundException("Service with code " + serviceCode));
+        validateDiagnose(diagnose);
+        service.addDiagnose(diagnose);
+        return this.carServiceDao.save(service);
+    }
+
+    private void validateDiagnose(Diagnose diagnose) throws RequiredFieldMissingException {
+        if(diagnose.getResult() == null || diagnose.getResult().trim().isEmpty()) {
+            log.info("Diagnose result missing");
+            throw new RequiredFieldMissingException("Diagnose result");
+        }
+        if(diagnose.getEventName() == null || diagnose.getEventName().trim().isEmpty()) {
+            log.info("Event name missing");
+            throw new RequiredFieldMissingException("Event name");
         }
     }
 }
