@@ -10,7 +10,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
 @EnableWebMvc
-@Import({CacheContext.class, ScheduleContext.class, DbConfig.class, PropertiesContext.class})
+@Import({CacheContext.class, ScheduleContext.class, DbConfig.class, PropertiesContext.class, MessagingConfig.class})
 @EnableAspectJAutoProxy
 @ComponentScan("com.compucar")
 public class WebContext implements WebMvcConfigurer {
