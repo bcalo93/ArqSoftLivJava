@@ -6,9 +6,12 @@ import com.compucar.service.exceptions.DuplicateElementException;
 import com.compucar.service.exceptions.InvalidFieldValueException;
 import com.compucar.service.exceptions.NotFoundException;
 import com.compucar.service.exceptions.RequiredFieldMissingException;
+import org.springframework.integration.support.MessageBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,6 +40,9 @@ public class CarServiceServiceImpl implements CarServiceService {
 
     @Autowired
     private Environment env;
+
+    @Autowired
+    private MessageChannel notifications;
 
     private final int DISCOUNT_PERCENTAGE;
 
@@ -86,8 +92,9 @@ public class CarServiceServiceImpl implements CarServiceService {
         validateServiceAdd(service);
         checkForDiscount(service);
         updateReaderUsageTime(service);
-
-        return carServiceDao.save(service);
+        CarService result = carServiceDao.save(service);
+        notifyServiceCreated(result);
+        return result;
     }
 
     private void attachServiceAttributes(CarService service) throws NotFoundException {
@@ -218,6 +225,12 @@ public class CarServiceServiceImpl implements CarServiceService {
             log.info("service client is a person and already did a service on this date");
             throw new InvalidFieldValueException("Client is a person and already did a service on this date");
         }
+    }
+
+    private void notifyServiceCreated(CarService service) {
+        log.info("sending service code {}", service.getCode());
+        Message<String> codeMessage = MessageBuilder.withPayload(service.getCode()).build();
+        notifications.send(codeMessage);
     }
 
     public CarService addDiagnose(String serviceCode, Diagnose diagnose) throws NotFoundException, RequiredFieldMissingException {

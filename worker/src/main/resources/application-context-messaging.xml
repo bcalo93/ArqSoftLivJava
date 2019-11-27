@@ -12,7 +12,7 @@
     <!-- define un adapter que rutea a el processListenerChannel los mensajes
 	que llegan a la queue -->
     <int-jms:inbound-channel-adapter channel="notifications"
-                                     destination-name="${queue.process.request}" message-converter="messageConverter"
+                                     destination-name="${queue.process.notification}" message-converter="messageConverter"
                                      receive-timeout="${queue.receive.timeout}" connection-factory="connectionFactory"/>
 
     <!-- service que sera activado cuando un mensaje llegue a la queue -->

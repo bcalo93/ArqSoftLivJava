@@ -11,7 +11,7 @@
 
     <!-- define un adapter que rutea mensajes a la queue -->
     <int-jms:outbound-channel-adapter channel="notifications"
-                                      destination-name="${queue.process.request}" message-converter="messageConverter"
+                                      destination-name="${queue.process.notification}" message-converter="messageConverter"
                                       time-to-live="${queue.message.timetolive}" explicit-qos-enabled="true"
                                       connection-factory="connectionFactory"/>
 </beans>
