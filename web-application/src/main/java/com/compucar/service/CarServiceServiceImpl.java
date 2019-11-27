@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
@@ -61,6 +62,12 @@ public class CarServiceServiceImpl implements CarServiceService {
     public CarService getService(Long id) throws NotFoundException {
         log.info("getting service: {}", id);
         return carServiceDao.findById(id).orElseThrow(() -> new NotFoundException("Service with id " + id));
+    }
+
+    @Override
+    public List<CarService> getServicesBetweenDates(LocalDateTime from, LocalDateTime to) {
+        log.info("getting services between dates: {} and {}", from, to);
+        return carServiceDao.findByDateBetween(from, to);
     }
 
     @Override

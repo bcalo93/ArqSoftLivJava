@@ -13,8 +13,10 @@ import com.compucar.service.exceptions.RequiredFieldMissingException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -48,6 +50,22 @@ public class CarServiceController {
         log.info("service {} ", service);
 
         return service;
+    }
+
+    @GetMapping(params = {"from", "to"})
+    @AspectExecution
+    public List<CarService> getServicesBetweenDates(
+            @RequestParam(value = "from")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate from,
+            @RequestParam(value = "to")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate to) {
+        log.info("getServicesBetweenDates: from {}, to {}", from, to);
+        List<CarService> services = carServiceService.getServicesBetweenDates(from.atStartOfDay(), to.atTime(23, 59));
+        log.info("services {} ", services);
+
+        return services;
     }
 
     @PostMapping
