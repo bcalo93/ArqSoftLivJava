@@ -9,12 +9,16 @@ import com.compucar.service.exceptions.RequiredFieldMissingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -37,6 +41,9 @@ public class CarServiceServiceImpl implements CarServiceService {
 
     @Autowired
     private Environment env;
+
+    @Autowired
+    private MessageChannel reprocessSubmit;
 
     private final int DISCOUNT_PERCENTAGE;
 
@@ -247,4 +254,18 @@ public class CarServiceServiceImpl implements CarServiceService {
             throw new RequiredFieldMissingException("Event name");
         }
     }
+
+    @Override
+    public void reprocessServiceEvents(LocalDate from, LocalDate to) {
+        List<String> serviceCodes = getServicesBetweenDates(from, to).stream().map(service -> service.getCode())
+                .collect(Collectors.toList());
+        enqueueServiceNames(serviceCodes);
+    }
+
+    private void enqueueServiceNames(List<String> serviceCodes) {
+        log.info("sending service code {}", serviceCodes);
+        Message<List<String>> codeMessage = MessageBuilder.withPayload(serviceCodes).build();
+        reprocessSubmit.send(codeMessage);
+    }
+
 }

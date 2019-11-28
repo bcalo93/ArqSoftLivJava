@@ -5,7 +5,10 @@ import com.compucar.service.EventService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 
 @Slf4j
@@ -24,5 +27,17 @@ public class MessageHandler {
         EventIdDto eventIdDto = message.getPayload();
         log.info("get EventIdDto from processTask {}", eventIdDto);
         this.eventService.processSingleEvent(eventIdDto);
+    }
+
+    public void reprocessSubmit(Message<List<String>> message) {
+        List<String> serviceCodes = message.getPayload();
+        log.info("reprocessSubmit with message {}", serviceCodes);
+        this.eventService.processServiceCodeList(serviceCodes);
+    }
+
+    public void reprocessService(Message<EventIdDto[]> message) {
+        EventIdDto[] eventIdDtos = message.getPayload();
+        log.info("reprocessService with message {}", eventIdDtos);
+        this.eventService.reprocessEvents(eventIdDtos);
     }
 }

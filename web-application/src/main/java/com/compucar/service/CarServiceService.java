@@ -26,4 +26,6 @@ public interface CarServiceService {
     CarService addService(CarService service) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException, InvalidFieldValueException;
 
     CarService addDiagnose(String serviceCode, Diagnose diagnose) throws NotFoundException, RequiredFieldMissingException;
+
+    void reprocessServiceEvents(LocalDate from, LocalDate to);
 }

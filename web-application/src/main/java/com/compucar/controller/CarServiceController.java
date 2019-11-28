@@ -3,6 +3,7 @@ package com.compucar.controller;
 import com.compucar.aop.AspectExecution;
 import com.compucar.dto.CarServiceDto;
 import com.compucar.dto.EventDto;
+import com.compucar.dto.ServiceReprocessDto;
 import com.compucar.model.*;
 import com.compucar.service.CarServiceService;
 import com.compucar.service.EventService;
@@ -135,4 +136,21 @@ public class CarServiceController {
 
         return service;
     }
+
+    @PostMapping(path="/reprocess", params = {"from", "to"})
+    @AspectExecution
+    public void submitReprocess(@RequestParam(value = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                            LocalDate from,
+                                @RequestParam(value = "to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                            LocalDate to) {
+        if(from == null) {
+            from = LocalDate.now();
+        }
+
+        if(to == null) {
+            to = LocalDate.now();
+        }
+        this.carServiceService.reprocessServiceEvents(from, to);
+    }
+
 }
