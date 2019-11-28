@@ -57,14 +57,12 @@ public class EventServiceImp implements EventService {
         log.info("The following EventDto was found: {}", eventDto);
         if(eventDto != null) {
             log.info("The following EventDto is being processed: {}", eventDto);
-            String applicationName = env.getProperty("server.applicationName");
-            log.info("applicationName {}", applicationName);
             String port = env.getProperty("server.port");
-            log.info("port {}", port);
+            String applicationName = env.getProperty("server.applicationName");
             String result = new StringBuffer("service_").append(eventDto.getServiceCode())
-                    .append("_event_").append(eventDto.getName()).append("_worker_").append(applicationName)
+                    .append("_event_").append(eventDto.getName()).append("_workerName_").append(applicationName)
                     .append("_port_").append(port).toString();
-
+            log.info("Processing result: {}", result);
             postDiagnose(eventDto.getServiceCode(), new DiagnoseDto(eventDto.getName(), result));
         }
     }

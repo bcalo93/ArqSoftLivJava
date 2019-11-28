@@ -7,7 +7,6 @@ import org.springframework.messaging.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 
 @Slf4j
 @Component
@@ -26,7 +25,4 @@ public class MessageHandler {
         log.info("get EventIdDto from processTask {}", eventIdDto);
         this.eventService.processSingleEvent(eventIdDto);
     }
-
-
-
 }

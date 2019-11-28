@@ -10,8 +10,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.env.Environment;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageChannel;
 
 import java.time.LocalDateTime;
 import java.time.Period;
