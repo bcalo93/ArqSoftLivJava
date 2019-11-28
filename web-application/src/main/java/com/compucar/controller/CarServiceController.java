@@ -107,10 +107,7 @@ public class CarServiceController {
         CarService serviceAdded = carServiceService.addService(service);
         List<EventDto> serviceEvents = serviceDto.getEvents();
         if(serviceEvents != null) {
-            for (EventDto event : serviceEvents) {
-                event.setServiceCode(service.getCode());
-                eventService.postEvent(event);
-            }
+            eventService.processEvents(service.getCode(), serviceEvents);
         }
 
         return serviceAdded;

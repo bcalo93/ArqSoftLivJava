@@ -48,7 +48,8 @@ public class CarServiceImplTest {
         }
         when(carServiceDao.findAll()).thenReturn(mockList);
 
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
         List<CarService> result = service.listServices();
 
         Assert.assertEquals(10, result.size());
@@ -65,7 +66,8 @@ public class CarServiceImplTest {
         carService.setCode("SF43");
         when(carServiceDao.findById(carServiceId)).thenReturn(Optional.of(carService));
 
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
         CarService result = service.getService(carServiceId);
 
         Assert.assertEquals(carServiceId, result.getId());
@@ -79,7 +81,8 @@ public class CarServiceImplTest {
         Long carServiceId = 50L;
         when(carServiceDao.findById(carServiceId)).thenReturn(Optional.empty());
 
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
         try {
             CarService result = service.getService(carServiceId);
         } finally {
@@ -118,7 +121,8 @@ public class CarServiceImplTest {
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(carServiceDao.save(isA(CarService.class))).thenReturn(newCarService);
         when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         CarService result = service.addService(newCarService);
         Assert.assertEquals(newCarService, result);
@@ -142,7 +146,8 @@ public class CarServiceImplTest {
         newCarService.setClient(carServiceClient);
 
         when(clientDao.findByNumber(carServiceClient.getNumber())).thenReturn(Optional.empty());
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -164,7 +169,8 @@ public class CarServiceImplTest {
 
         when(clientDao.findByNumber(carServiceClient.getNumber())).thenReturn(Optional.of(carServiceClient));
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.empty());
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -191,7 +197,8 @@ public class CarServiceImplTest {
         when(clientDao.findByNumber(carServiceClient.getNumber())).thenReturn(Optional.of(carServiceClient));
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.empty());
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -223,7 +230,8 @@ public class CarServiceImplTest {
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.empty());
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -258,7 +266,8 @@ public class CarServiceImplTest {
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
         when(carServiceDao.existsByCode(newCarService.getCode())).thenReturn(true);
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -292,7 +301,8 @@ public class CarServiceImplTest {
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -326,7 +336,8 @@ public class CarServiceImplTest {
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -357,7 +368,8 @@ public class CarServiceImplTest {
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -387,7 +399,8 @@ public class CarServiceImplTest {
         when(clientDao.findByNumber(carServiceClient.getNumber())).thenReturn(Optional.of(carServiceClient));
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -417,7 +430,8 @@ public class CarServiceImplTest {
         when(clientDao.findByNumber(carServiceClient.getNumber())).thenReturn(Optional.of(carServiceClient));
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -447,7 +461,8 @@ public class CarServiceImplTest {
         when(clientDao.findByNumber(carServiceClient.getNumber())).thenReturn(Optional.of(carServiceClient));
         when(workshopDao.findByCode(carServiceWorkshop.getCode())).thenReturn(Optional.of(carServiceWorkshop));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -482,7 +497,8 @@ public class CarServiceImplTest {
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
         when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -520,7 +536,8 @@ public class CarServiceImplTest {
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
         when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -559,7 +576,8 @@ public class CarServiceImplTest {
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
         when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -600,7 +618,8 @@ public class CarServiceImplTest {
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
         when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -641,7 +660,8 @@ public class CarServiceImplTest {
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
         when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -687,7 +707,8 @@ public class CarServiceImplTest {
         when(mechanicDao.findByNumber(carServiceMechanic.getNumber())).thenReturn(Optional.of(carServiceMechanic));
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
         when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -730,7 +751,8 @@ public class CarServiceImplTest {
         when(readerDao.findByCode(carServiceReader.getCode())).thenReturn(Optional.of(carServiceReader));
         when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
         when(carServiceDao.countByMechanicAndDateBetween(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class))).thenReturn(6);
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -775,7 +797,8 @@ public class CarServiceImplTest {
         when(env.getProperty("reader.minBatteryLife")).thenReturn("20");
         when(carServiceDao.countByMechanicAndDateBetween(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class))).thenReturn(0);
         when(carServiceDao.existsByMechanicAndDateBetweenAndWorkshopNot(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class), isA(Workshop.class))).thenReturn(true);
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -823,7 +846,8 @@ public class CarServiceImplTest {
         when(carServiceDao.countByMechanicAndDateBetween(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class))).thenReturn(0);
         when(carServiceDao.existsByMechanicAndDateBetweenAndWorkshopNot(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class), isA(Workshop.class))).thenReturn(false);
         when(carServiceDao.existsByClientAndDateBetween(isA(Client.class), isA(LocalDateTime.class), isA(LocalDateTime.class))).thenReturn(true);
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         try {
             CarService result = service.addService(newCarService);
@@ -873,7 +897,8 @@ public class CarServiceImplTest {
         when(carServiceDao.existsByMechanicAndDateBetweenAndWorkshopNot(isA(Mechanic.class), isA(LocalDateTime.class), isA(LocalDateTime.class), isA(Workshop.class))).thenReturn(false);
         when(carServiceDao.countByClientAndDateBetween(isA(Client.class), isA(LocalDateTime.class), isA(LocalDateTime.class))).thenReturn(6);
         when(carServiceDao.save(isA(CarService.class))).thenReturn(newCarService);
-        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao, workshopDao, env);
+        CarServiceService service = new CarServiceServiceImpl(carServiceDao, clientDao, mechanicDao, readerDao,
+                workshopDao, env);
 
         CarService result = service.addService(newCarService);
         Assert.assertEquals(newCarService.getCost(), 80, 0);

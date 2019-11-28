@@ -48,7 +48,6 @@ public class CarServiceServiceImpl implements CarServiceService {
         this.readerDao = readerDao;
         this.workshopDao = workshopDao;
         this.env = env;
-
         DISCOUNT_PERCENTAGE = 20;
     }
 
@@ -98,7 +97,6 @@ public class CarServiceServiceImpl implements CarServiceService {
         validateServiceAdd(service);
         checkForDiscount(service);
         updateReaderUsageTime(service);
-
         return carServiceDao.save(service);
     }
 
