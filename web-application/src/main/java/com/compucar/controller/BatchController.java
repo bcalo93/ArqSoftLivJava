@@ -1,10 +1,7 @@
 package com.compucar.controller;
 
 import com.compucar.aop.AspectExecution;
-import com.compucar.dto.CarServiceDto;
-import com.compucar.dto.EntityDtoConverter;
-import com.compucar.dto.MechanicDto;
-import com.compucar.dto.ReaderDto;
+import com.compucar.dto.*;
 import com.compucar.model.*;
 import com.compucar.service.*;
 import com.compucar.service.exceptions.*;
@@ -46,34 +43,57 @@ public class BatchController {
     @Autowired
     private CarServiceService carServiceService;
 
+    @Autowired
+    private EventService eventService;
 
     @PostMapping
     @AspectExecution
     public void create(@RequestBody Batch batch) throws EntityNullException, RequiredFieldMissingException, DuplicateElementException, NotFoundException, InvalidFieldValueException {
-        log.info("list all beans created");
-        for (Client c : batch.getClients()) {
-            clientService.addClient(c);
+        log.info("insert clients from batch");
+        if(batch.getClients() != null) {
+            for (Client c : batch.getClients()) {
+                clientService.addClient(c);
+            }
         }
 
-        List<Mechanic> mechanics = entityDtoConverter.convertToEntities(batch.getMechanics());
-        for(Mechanic m : mechanics) {
-            mechanicService.addMechanic(m);
+        log.info("insert mechanics from batch");
+        if(batch.getMechanics() != null) {
+            List<Mechanic> mechanics = entityDtoConverter.convertToEntities(batch.getMechanics());
+            for (Mechanic m : mechanics) {
+                mechanicService.addMechanic(m);
+            }
         }
 
-        for(Workshop w : batch.getWorkshops()) {
-            workshopService.addWorkshop(w);
+        log.info("insert workshops from batch");
+        if(batch.getWorkshops() != null) {
+            for (Workshop w : batch.getWorkshops()) {
+                workshopService.addWorkshop(w);
+            }
         }
 
-        for(ReaderDto readerDto : batch.getReaders()) {
-            Reader reader = modelMapper.map(readerDto, Reader.class);
-            readerService.addReader(reader);
+        log.info("insert readers from batch");
+        if(batch.getReaders() != null) {
+            for (ReaderDto readerDto : batch.getReaders()) {
+                Reader reader = modelMapper.map(readerDto, Reader.class);
+                readerService.addReader(reader);
+            }
         }
 
-        for (CarServiceDto carServiceDto : batch.getServices()) {
-            CarService service = this.convertCarServiceToEntity(carServiceDto);
-            carServiceService.addService(service);
-        }
+        log.info("insert services from batch");
+        if(batch.getServices() != null) {
+            for (CarServiceDto carServiceDto : batch.getServices()) {
+                CarService service = this.convertCarServiceToEntity(carServiceDto);
+                carServiceService.addService(service);
 
+                List<EventDto> serviceEvents = carServiceDto.getEvents();
+                if (serviceEvents != null) {
+                    for (EventDto event : serviceEvents) {
+                        event.setServiceCode(service.getCode());
+                        eventService.postEvent(event);
+                    }
+                }
+            }
+        }
     }
 
     private CarService convertCarServiceToEntity(CarServiceDto serviceDto) {

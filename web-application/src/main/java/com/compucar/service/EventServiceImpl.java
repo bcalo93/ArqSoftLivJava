@@ -2,6 +2,7 @@ package com.compucar.service;
 
 import com.compucar.dto.EventDto;
 import com.compucar.service.exceptions.InvalidFieldValueException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -11,8 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-
+@Slf4j
 @Service
 public class EventServiceImpl implements EventService {
 
@@ -28,10 +28,12 @@ public class EventServiceImpl implements EventService {
         try {
             ResponseEntity<Void> responseEntity = restTemplate.postForEntity(url, requestEntity, Void.class);
             if(responseEntity.getStatusCode() != HttpStatus.OK) {
+                log.info("Error trying to post events to repository system. Response code: " + responseEntity.getStatusCode());
                 throw new InvalidFieldValueException("Error trying to post events to repository system");
             }
         }
         catch (RestClientException e) {
+            log.info("Error trying to connect to repository system" + e.getMessage());
             throw new InvalidFieldValueException("Error trying to post events to repository system");
         }
     }
