@@ -1,15 +1,20 @@
 package com.compucar.service;
 
+import com.compucar.dto.DiagnoseDto;
 import com.compucar.dto.EventDto;
 import com.compucar.dto.EventIdDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -22,8 +27,14 @@ public class EventServiceImp implements EventService {
     @Autowired
     private MessageChannel publishTasks;
 
+    @Autowired
+    private Environment env;
+
     @Value("${service.repository.url}")
     private String repositoryUrl;
+
+    @Value("${service.webapp.url}")
+    private String webAppUrl;
 
     @Override
     public void processServiceCode(String serviceCode) {
@@ -44,8 +55,18 @@ public class EventServiceImp implements EventService {
     public void processSingleEvent(EventIdDto eventIdDto) {
         EventDto eventDto = getSingleEvent(eventIdDto);
         log.info("The following EventDto was found: {}", eventDto);
-//        if(eventDto != null) {
-//        }
+        if(eventDto != null) {
+            log.info("The following EventDto is being processed: {}", eventDto);
+            String applicationName = env.getProperty("server.applicationName");
+            log.info("applicationName {}", applicationName);
+            String port = env.getProperty("server.port");
+            log.info("port {}", port);
+            String result = new StringBuffer("service_").append(eventDto.getServiceCode())
+                    .append("_event_").append(eventDto.getName()).append("_worker_").append(applicationName)
+                    .append("_port_").append(port).toString();
+
+            postDiagnose(eventDto.getServiceCode(), new DiagnoseDto(eventDto.getName(), result));
+        }
     }
 
     private void publishTask(EventIdDto event) {
@@ -59,9 +80,29 @@ public class EventServiceImp implements EventService {
                 .append(eventIdDto.getServiceCode()).append("&name=")
                 .append(eventIdDto.getName())
                 .toString();
+        try {
+            ResponseEntity<EventDto[]> response = restTemplate.getForEntity(requestUrl, EventDto[].class);
+            EventDto[] result = response.getBody();
+            return result != null && result.length > 0 ? result[0] : null;
 
-        ResponseEntity<EventDto[]> response = restTemplate.getForEntity(requestUrl, EventDto[].class);
-        EventDto[] result = response.getBody();
-        return result != null && result.length > 0 ? result[0] : null;
+        } catch(RestClientException re) {
+            return null;
+        }
+
+    }
+
+    private void postDiagnose(String serviceName, DiagnoseDto diagnoseDto) {
+        String endpointUrl = new StringBuffer(webAppUrl).append("/")
+                .append(serviceName).append("/diagnoses").toString();
+        HttpEntity<DiagnoseDto> requestEntity = new HttpEntity<>(diagnoseDto);
+        try {
+            ResponseEntity<Void> responseEntity = restTemplate.postForEntity(endpointUrl, requestEntity, Void.class);
+            if(responseEntity.getStatusCode() != HttpStatus.OK) {
+                log.info("status code is not OK: {}", responseEntity.getStatusCode());
+            }
+
+        } catch(RestClientException re) {
+            log.info("call to this url {} failed", endpointUrl);
+        }
     }
 }
