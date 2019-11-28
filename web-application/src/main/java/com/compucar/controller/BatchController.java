@@ -87,10 +87,7 @@ public class BatchController {
 
                 List<EventDto> serviceEvents = carServiceDto.getEvents();
                 if (serviceEvents != null) {
-                    for (EventDto event : serviceEvents) {
-                        event.setServiceCode(service.getCode());
-                        eventService.postEvent(event);
-                    }
+                    eventService.processEvents(service.getCode(), serviceEvents);
                 }
             }
         }
