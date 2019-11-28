@@ -36,10 +36,12 @@ public class EventServiceImpl implements EventService {
         try {
             ResponseEntity<Void> responseEntity = restTemplate.postForEntity(url, requestEntity, Void.class);
             if(responseEntity.getStatusCode() != HttpStatus.OK) {
+                log.info("Error trying to post events to repository system. Response code: " + responseEntity.getStatusCode());
                 throw new InvalidFieldValueException("Error trying to post events to repository system");
             }
         }
         catch (RestClientException e) {
+            log.info("Error trying to connect to repository system" + e.getMessage());
             throw new InvalidFieldValueException("Error trying to post events to repository system");
         }
     }
