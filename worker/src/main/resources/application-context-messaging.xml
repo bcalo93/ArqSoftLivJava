@@ -8,6 +8,8 @@
 
     <!-- crea un channel para el listener que va a consumir los mensajes -->
     <int:channel id="notifications"/>
+    <int:channel id="publishTasks"/>
+    <int:channel id="processTask"/>
 
     <!-- define un adapter que rutea a el processListenerChannel los mensajes
 	que llegan a la queue -->
@@ -16,9 +18,22 @@
                                      receive-timeout="${queue.receive.timeout}" connection-factory="connectionFactory"/>
 
     <!-- service que sera activado cuando un mensaje llegue a la queue -->
-    <int:service-activator id="processServiceActivator"
+    <int:service-activator id="notificationActivator"
                            input-channel="notifications"
                            ref="messageHandler" method="processService"/>
+
+    <int-jms:outbound-channel-adapter channel="publishTasks"
+                                      destination-name="${queue.process.tasks}" message-converter="messageConverter"
+                                      time-to-live="${queue.message.timetolive}" explicit-qos-enabled="true"
+                                      connection-factory="connectionFactory"/>
+
+    <int-jms:inbound-channel-adapter channel="processTask"
+                                     destination-name="${queue.process.tasks}" message-converter="messageConverter"
+                                     receive-timeout="${queue.receive.timeout}" connection-factory="connectionFactory"/>
+
+    <int:service-activator id="taskActivator"
+                           input-channel="processTask"
+                           ref="messageHandler" method="processTask"/>
 
     <!-- pooler -->
     <int:poller id="poller" default="true" fixed-delay="100"/>

@@ -47,14 +47,14 @@ public class CarServiceServiceImpl implements CarServiceService {
     private final int DISCOUNT_PERCENTAGE;
 
     public CarServiceServiceImpl(CarServiceDao carServiceDao, ClientDao clientDao, MechanicDao mechanicDao,
-                                 ReaderDao readerDao, WorkshopDao workshopDao, Environment env, MessageChannel channel) {
+                                 ReaderDao readerDao, WorkshopDao workshopDao, Environment env, MessageChannel notifications) {
         this.carServiceDao = carServiceDao;
         this.clientDao = clientDao;
         this.mechanicDao = mechanicDao;
         this.readerDao = readerDao;
         this.workshopDao = workshopDao;
         this.env = env;
-        this.notifications = channel;
+        this.notifications = notifications;
         DISCOUNT_PERCENTAGE = 20;
     }
 
