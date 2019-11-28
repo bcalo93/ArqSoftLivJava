@@ -8,10 +8,16 @@
 
     <!-- define un channel para comunicar mensajes hacia una jms queue -->
     <int:channel id="notifications"/>
+    <int:channel id="reprocessSubmit"/>
 
     <!-- define un adapter que rutea mensajes a la queue -->
     <int-jms:outbound-channel-adapter channel="notifications"
                                       destination-name="${queue.process.notification}" message-converter="messageConverter"
+                                      time-to-live="${queue.message.timetolive}" explicit-qos-enabled="true"
+                                      connection-factory="connectionFactory"/>
+
+    <int-jms:outbound-channel-adapter channel="reprocessSubmit"
+                                      destination-name="${queue.process.submitreprocess}" message-converter="messageConverter"
                                       time-to-live="${queue.message.timetolive}" explicit-qos-enabled="true"
                                       connection-factory="connectionFactory"/>
 </beans>

@@ -11,6 +11,11 @@
     <int:channel id="publishTasks"/>
     <int:channel id="processTask"/>
 
+    <int:channel id="reprocessSubmit"/>
+
+    <int:channel id="sendService"/>
+    <int:channel id="reprocessService"/>
+
     <!-- define un adapter que rutea a el processListenerChannel los mensajes
 	que llegan a la queue -->
     <int-jms:inbound-channel-adapter channel="notifications"
@@ -34,6 +39,28 @@
     <int:service-activator id="taskActivator"
                            input-channel="processTask"
                            ref="messageHandler" method="processTask"/>
+    
+    <int-jms:inbound-channel-adapter channel="reprocessSubmit"
+                                     destination-name="${queue.process.submitreprocess}" message-converter="messageConverter"
+                                     receive-timeout="${queue.receive.timeout}" connection-factory="connectionFactory"/>
+
+    <!-- service que sera activado cuando un mensaje llegue a la queue -->
+    <int:service-activator id="reprocessSubmitActivator"
+                           input-channel="reprocessSubmit"
+                           ref="messageHandler" method="reprocessSubmit"/>
+
+    <int-jms:outbound-channel-adapter channel="sendService"
+                                      destination-name="${queue.process.sendservice}" message-converter="messageConverter"
+                                      time-to-live="${queue.message.timetolive}" explicit-qos-enabled="true"
+                                      connection-factory="connectionFactory"/>
+
+    <int-jms:inbound-channel-adapter channel="reprocessService"
+                                     destination-name="${queue.process.sendservice}" message-converter="messageConverter"
+                                     receive-timeout="${queue.receive.timeout}" connection-factory="connectionFactory"/>
+
+    <int:service-activator id="reprocessServiceActivator"
+                           input-channel="reprocessService"
+                           ref="messageHandler" method="reprocessService"/>
 
     <!-- pooler -->
     <int:poller id="poller" default="true" fixed-delay="100"/>

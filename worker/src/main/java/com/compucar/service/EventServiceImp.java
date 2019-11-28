@@ -17,6 +17,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Slf4j
 @Component
@@ -26,6 +30,9 @@ public class EventServiceImp implements EventService {
 
     @Autowired
     private MessageChannel publishTasks;
+
+    @Autowired
+    private MessageChannel sendService;
 
     @Autowired
     private Environment env;
@@ -38,17 +45,21 @@ public class EventServiceImp implements EventService {
 
     @Override
     public void processServiceCode(String serviceCode) {
-        String requestUrl = new StringBuffer(repositoryUrl).append("?code=")
-                .append(serviceCode)
-                .toString();
-        ResponseEntity<String[]> response = restTemplate.getForEntity(requestUrl, String[].class);
-        String[] eventNames = response.getBody();
+        String[] eventNames = getEventNames(serviceCode);
         if(eventNames != null) {
             for (String eventName : eventNames) {
                 log.info("response got with Event {}", eventName);
                 publishTask(new EventIdDto(serviceCode, eventName));
             }
         }
+    }
+
+    private String[] getEventNames(String serviceCode) {
+        String requestUrl = new StringBuffer(repositoryUrl).append("?code=")
+                .append(serviceCode)
+                .toString();
+        ResponseEntity<String[]> response = restTemplate.getForEntity(requestUrl, String[].class);
+        return response.getBody();
     }
 
     @Override
@@ -101,6 +112,36 @@ public class EventServiceImp implements EventService {
 
         } catch(RestClientException re) {
             log.info("call to this url {} failed", endpointUrl);
+        }
+    }
+
+    @Override
+    public void processServiceCodeList(List<String> serviceCodes) {
+        for (String serviceCode: serviceCodes) {
+            String[] eventNames = getEventNames(serviceCode);
+            log.info("Found eventNames: ", eventNames);
+            if(eventNames != null) {
+                EventIdDto[] eventIdDtos = new EventIdDto[eventNames.length];
+                for (int i = 0; i < eventNames.length; i++) {
+                    eventIdDtos[i] = new EventIdDto(serviceCode, eventNames[i]);
+                }
+                log.info("Events to reprocess: {}", eventIdDtos);
+                publishReprocessEvents(eventIdDtos);
+            }
+        }
+    }
+
+    private void publishReprocessEvents(EventIdDto[] events) {
+        Message<EventIdDto[]> message = MessageBuilder.withPayload(events).build();
+        boolean result = sendService.send(message);
+        log.info("result from sending message with EventIdDto {} is {}", events, result);
+    }
+
+    @Override
+    public void reprocessEvents(EventIdDto[] eventIdDtos) {
+        for (EventIdDto dtos: eventIdDtos) {
+            log.info("processing EventIdDto: {}", dtos);
+            this.processSingleEvent(dtos);
         }
     }
 }
