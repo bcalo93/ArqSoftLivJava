@@ -6,6 +6,6 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @ComponentScan("com.compucar")
-@Import({PropertiesContext.class, MessagingContext.class, ClientConfig.class})
+@Import({PropertiesContext.class, MessagingContext.class, ClientConfig.class, ScheduleContext.class})
 public class WebContext {
 }

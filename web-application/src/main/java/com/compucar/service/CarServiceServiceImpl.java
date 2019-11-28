@@ -41,20 +41,16 @@ public class CarServiceServiceImpl implements CarServiceService {
     @Autowired
     private Environment env;
 
-    @Autowired
-    private MessageChannel notifications;
-
     private final int DISCOUNT_PERCENTAGE;
 
     public CarServiceServiceImpl(CarServiceDao carServiceDao, ClientDao clientDao, MechanicDao mechanicDao,
-                                 ReaderDao readerDao, WorkshopDao workshopDao, Environment env, MessageChannel notifications) {
+                                 ReaderDao readerDao, WorkshopDao workshopDao, Environment env) {
         this.carServiceDao = carServiceDao;
         this.clientDao = clientDao;
         this.mechanicDao = mechanicDao;
         this.readerDao = readerDao;
         this.workshopDao = workshopDao;
         this.env = env;
-        this.notifications = notifications;
         DISCOUNT_PERCENTAGE = 20;
     }
 
@@ -104,9 +100,7 @@ public class CarServiceServiceImpl implements CarServiceService {
         validateServiceAdd(service);
         checkForDiscount(service);
         updateReaderUsageTime(service);
-        CarService result = carServiceDao.save(service);
-        notifyServiceCreated(result);
-        return result;
+        return carServiceDao.save(service);
     }
 
     private void attachServiceAttributes(CarService service) throws NotFoundException {
@@ -237,12 +231,6 @@ public class CarServiceServiceImpl implements CarServiceService {
             log.info("service client is a person and already did a service on this date");
             throw new InvalidFieldValueException("Client is a person and already did a service on this date");
         }
-    }
-
-    private void notifyServiceCreated(CarService service) {
-        log.info("sending service code {}", service.getCode());
-        Message<String> codeMessage = MessageBuilder.withPayload(service.getCode()).build();
-        notifications.send(codeMessage);
     }
 
     public CarService addDiagnose(String serviceCode, Diagnose diagnose) throws NotFoundException, RequiredFieldMissingException {

@@ -15,11 +15,6 @@ public class MessageHandler {
     @Autowired
     private EventService eventService;
 
-    @PostConstruct
-    public void postConstruct() {
-        //eventService.processServiceCode("SRV017");
-    }
-
     public void processService(Message<String> message) {
         String serviceCode = message.getPayload();
         log.info("get message from processService {}", serviceCode);
