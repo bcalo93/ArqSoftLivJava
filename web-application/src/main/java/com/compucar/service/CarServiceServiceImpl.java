@@ -71,7 +71,19 @@ public class CarServiceServiceImpl implements CarServiceService {
     }
 
     @Override
-    public List<CarService> getServicesForGivenMonth(int month) throws InvalidFieldValueException {
+    public List<CarService> getServicesBetweenDatesWithReader(LocalDate from, LocalDate to, String readerCode) {
+        log.info("getting services between dates with reader: from {}, to {}, reader code {}", from, to, readerCode);
+        return carServiceDao.findByReaderCodeAndDateBetween(readerCode, from.atStartOfDay(), to.atTime(23, 59));
+    }
+
+    @Override
+    public List<CarService> getServicesWithReader(String readerCode) {
+        log.info("getting services with reader code: {}", readerCode);
+        return carServiceDao.findByReaderCode(readerCode);
+    }
+
+    @Override
+    public List<CarService> getServicesForGivenMonth(Integer month) throws InvalidFieldValueException {
         if(month < 1 || month > 12) {
             throw new InvalidFieldValueException("Month must be between 1 and 12");
         }

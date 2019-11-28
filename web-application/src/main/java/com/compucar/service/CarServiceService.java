@@ -17,7 +17,11 @@ public interface CarServiceService {
 
     List<CarService> getServicesBetweenDates(LocalDate from, LocalDate to);
 
-    List<CarService> getServicesForGivenMonth(int month) throws InvalidFieldValueException;
+    List<CarService> getServicesBetweenDatesWithReader(LocalDate from, LocalDate to, String readerCode);
+
+    List<CarService> getServicesWithReader(String readerCode);
+
+    List<CarService> getServicesForGivenMonth(Integer month) throws InvalidFieldValueException;
 
     CarService addService(CarService service) throws RequiredFieldMissingException, DuplicateElementException, NotFoundException, InvalidFieldValueException;
 

@@ -68,9 +68,26 @@ public class CarServiceController {
         return services;
     }
 
+    @GetMapping(params = {"from", "to", "reader"})
+    @AspectExecution
+    public List<CarService> getServicesBetweenDatesWithReader(
+            @RequestParam(value = "from")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate from,
+            @RequestParam(value = "to")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate to,
+            @RequestParam(value = "reader") String readerCode) {
+        log.info("getServicesBetweenDatesWithReader: from {}, to {}, reader {}", from, to, readerCode);
+        List<CarService> services = carServiceService.getServicesBetweenDatesWithReader(from, to, readerCode);
+        log.info("services {} ", services);
+
+        return services;
+    }
+
     @GetMapping(params = "month")
     @AspectExecution
-    public List<CarService> getServicesForGivenMonth(@RequestParam(value = "month") int month) throws InvalidFieldValueException {
+    public List<CarService> getServicesForGivenMonth(@RequestParam(value = "month") Integer month) throws InvalidFieldValueException {
         log.info("getServicesForGivenMonth: {}", month);
         List<CarService> services = carServiceService.getServicesForGivenMonth(month);
         log.info("services {} ", services);

@@ -20,8 +20,12 @@ public interface CarServiceDao extends JpaRepository<CarService, Long> {
 
     List<CarService> findByDateBetween(LocalDateTime from, LocalDateTime to);
 
+    List<CarService> findByReaderCode(String readerCode);
+
+    List<CarService> findByReaderCodeAndDateBetween(String readerCode, LocalDateTime from, LocalDateTime to);
+
     @Query("Select s from CarService s where MONTH(s.date) = :month")
-    List<CarService> findByMonth(@Param("month") int month);
+    List<CarService> findByMonth(@Param("month") Integer month);
 
     boolean existsByCode(String code);
 

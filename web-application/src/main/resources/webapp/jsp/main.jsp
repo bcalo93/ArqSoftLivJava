@@ -17,7 +17,14 @@
             <li><a href="/app/page/readers">Readers</a></li>
             <li><a href="/app/page/services">Services</a></li>
             <li><a href="/app/page/logs">Operation logs</a></li>
-            <li><a href="/app/page/usagereport">Usage reports</a></li>
+            <li>
+                Reports
+                <ul>
+                    <li><a href="/app/page/usagereport">Usage reports</a></li>
+                    <li><a href="/app/page/services-monthly">Services by month</a></li>
+                    <li><a href="/app/page/services-dates-reader">Services between dates with reader</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
 </html>
